@@ -50,16 +50,15 @@ document.addEventListener('keydown', (event) => {
     saveGameState(); // Uložit po každém pohybu
 });
 
-document.getElementById('settings-btn').addEventListener('click', () => {
-    document.getElementById('settings-menu').classList.toggle('hidden');
+document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('menu-panel').classList.toggle('hidden');
 });
 
-// Zavření menu kliknutím mimo
 document.addEventListener('click', (event) => {
-    const settingsContainer = document.getElementById('settings-container');
-    const settingsMenu = document.getElementById('settings-menu');
+    const menuBtn = document.getElementById('menu-btn');
+    const menuPanel = document.getElementById('menu-panel');
 
-    if (!settingsContainer.contains(event.target)) {
-        settingsMenu.classList.add('hidden');
+    if (!menuBtn.contains(event.target) && !menuPanel.contains(event.target)) {
+        menuPanel.classList.add('hidden');
     }
 });
