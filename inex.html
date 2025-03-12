@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Clicker</title>
+    <link rel="stylesheet" href="MainGame.css?v=1">
+</head>
+<body>
+<div class="container" id="hero-selection">
+    <h1>Choose Your Hero</h1>
+    <div class="hero-image-container">
+        <img id="hero-image" src="" alt="Selected Hero">
+    </div>
+    <div>
+        <button id="warrior-btn">Choose Warrior</button>
+        <p id="warrior-stats" class="hidden">Health: 120 | Attack: 10 | Defense: 8</p>
+    </div>
+    <div>
+        <button id="mage-btn">Choose Mage</button>
+        <p id="mage-stats" class="hidden">Health: 80 | Attack: 5 | Magic: 40</p>
+    </div>
+    <br>
+    <button id="confirm-btn" class="hidden">Confirm Selection</button>
+</div>
+
+<div class="container hidden" id="game-area">
+    <div class="hero-container">
+        <img id="hp-bar" src="Myimages/Full.png" alt="HP Bar" class="hp-bar">
+        <img id="game-hero-image" src="" alt="Your Hero">
+    </div>
+    <div id="coin-container">
+        <img id="coin-image" src="Myimages/coin.jpg" alt="Coin">
+        <span id="gold-amount">0</span>
+    </div>
+    <p id="enemy-health">Enemy Health: 100</p>
+    <p id="units-count">Units: 0</p>
+
+    <br>
+    <button id="buy-unit-btn">Buy Unit (10 Gold)</button>
+</div>
+
+<div id="settings-container">
+    <button id="settings-btn">⚙️</button>
+    <div id="settings-menu" class="hidden">
+        <button id="restart-btn">Restart</button>
+    </div>
+</div>
+<script src="index.js"></script>
+<script src="Cookies.js"></script>
+<script src="EventListeners.js"></script>
+<script src="SaveLoadGame.js"></script>
+<script src="UpdateFunctions.js"></script>
+
+
+
+
+</body>
+</html>
