@@ -1,4 +1,42 @@
 // Setup event listeners
+// Add this to your EventListeners.js
+document.getElementById('save-btn').addEventListener('click', () => {
+    const gameStateData = getCookie('gameState');
+    if (gameStateData) {
+        const blob = new Blob([gameStateData], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'fantasy-game-save.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+});
+
+document.getElementById('load-btn').addEventListener('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const content = event.target.result;
+                setCookie('gameState', content, 365);
+                loadGameState();
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    fileInput.click();
+});
+
 
 document.getElementById('warrior-btn').addEventListener('click', () => chooseHero('warrior'));
 document.getElementById('mage-btn').addEventListener('click', () => chooseHero('mage'));
@@ -62,3 +100,5 @@ document.addEventListener('click', (event) => {
         menuPanel.classList.add('hidden');
     }
 });
+
+
