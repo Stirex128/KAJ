@@ -56,31 +56,16 @@ document.getElementById('restart-btn').addEventListener('click', () => {
 document.getElementById('mage-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0084.png';
 });
 
-document.addEventListener('keydown', (event) => {
-    if (!canMove) return;
+// Objekt pro sledování stisknutých kláves
+const keysPressed = {};
 
-    switch (event.key) {
-        case 'w':
-            heroPosition.y -= moveSpeed;
-            break;
-        case 's':
-            heroPosition.y += moveSpeed;
-            break;
-        case 'a':
-            heroPosition.x -= moveSpeed;
-            break;
-        case 'd':
-            heroPosition.x += moveSpeed;
-            break;
-        case 'q':
-            attackEnemy(); // normální útok
-            break;
-        case 'e':
-            attackEnemy(); // speciální útok
-            break;
-    }
-    updateHeroPosition();
-    saveGameState(); // Uložit po každém pohybu
+// Události pro sledování stisknutí a uvolnění kláves
+document.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
+});
+
+document.addEventListener('keyup', (event) => {
+    delete keysPressed[event.key];
 });
 
 document.getElementById('menu-btn').addEventListener('click', () => {

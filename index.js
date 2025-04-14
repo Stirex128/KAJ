@@ -7,7 +7,10 @@ const gameState = {
     units: [],
     enemyHealth: 100,
     gold: 0,
-    heroPosition: { x: window.innerWidth / 2, y: 100 }
+    heroPosition: { x: window.innerWidth / 2, y: 100 },
+    // Add this to your gameState
+    lastAttackTime: 0, // Timestamp of the last attack
+    attackCooldown: 500, // Cooldown in milliseconds
 };
 if (!window.gameState) window.gameState = {};
 if (!window.gameState.enemies) window.gameState.enemies = [];
@@ -202,7 +205,7 @@ function animateAttack() {
 
 // Pozice postavy
 let heroPosition = { x: window.innerWidth / 2, y: 100 }; // Startovní pozice
-const moveSpeed = 10; // Jak rychle se postava pohybuje
+const moveSpeed = 5; // Jak rychle se postava pohybuje
 
 window.onload = function() {
     const backgroundMusic = document.getElementById('background-music');

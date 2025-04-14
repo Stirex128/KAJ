@@ -194,52 +194,41 @@ window.canMove = true; // Ensure this is set to true
 
 // Modify the gameLoop function
 function gameLoop() {
-    // Remove or reduce debug logs to avoid console spam
-    // console.log("Game loop tick");
+    const currentTime = Date.now();
 
-    // Don't check canMove here since it might not be properly synchronized
-    // Instead, always allow enemy movement
-    try {
-        // Kontrola, zda existuje pole nepřátel
-        if (!window.gameState.enemies) {
-            window.gameState.enemies = [];
-        }
+    // Handle movement
+    if (keysPressed['w']) heroPosition.y -= moveSpeed; // Move up
+    if (keysPressed['s']) heroPosition.y += moveSpeed; // Move down
+    if (keysPressed['a']) heroPosition.x -= moveSpeed; // Move left
+    if (keysPressed['d']) heroPosition.x += moveSpeed; // Move right
+    updateHeroPosition();
 
-        // Pohyb a útok nepřátel - ALWAYS move enemies regardless of canMove
-        for (let i = window.gameState.enemies.length - 1; i >= 0; i--) {
-            const enemy = window.gameState.enemies[i];
-            if (!enemy) continue;
-
-            // Force movement of enemies
-            enemy.move();
-            enemy.updateHealthBar();
-
-            // Only attack if hero exists
-            if (window.gameState.hero) {
-                enemy.attack(window.gameState.hero);
-            }
-
-            // Check for dead enemies
-            if (enemy.health <= 0) {
-                console.log(`${enemy.type} byl zabit!`);
-                if (enemy.element && enemy.element.parentNode) {
-                    enemy.element.parentNode.removeChild(enemy.element);
-                }
-                window.gameState.gold += Math.floor(Math.random() * 5) + 3;
-                window.gameState.enemies.splice(i, 1);
-                updateUI();
-            }
-        }
-
-        // Spawn new enemies occasionally
-        if (Math.random() < 0.001 && window.gameState.enemies.length < 5) {
-            spawnEnemy();
-        }
-    } catch (e) {
-        console.error("Chyba v gameLoop:", e);
+    // Handle attacks with cooldown
+    if (keysPressed['q'] && currentTime - gameState.lastAttackTime > gameState.attackCooldown) {
+        attackEnemy();
+        gameState.lastAttackTime = currentTime; // Update last attack time
     }
 
-    // Always continue the animation frame
+    if (keysPressed['e'] && currentTime - gameState.lastAttackTime > gameState.attackCooldown) {
+        specialAttack();
+        gameState.lastAttackTime = currentTime; // Update last attack time
+    }
+
+    // Update enemies
+    if (window.gameState.enemies) {
+        window.gameState.enemies.forEach(enemy => {
+            enemy.move();
+            enemy.updateHealthBar();
+            enemy.attack(window.gameState.hero);
+        });
+    }
+
+    // Spawn new enemies
+    if (Math.random() < 0.001 && window.gameState.enemies.length < 5) {
+        spawnEnemy();
+    }
+
+    // Continue the game loop
     requestAnimationFrame(gameLoop);
 }
 
