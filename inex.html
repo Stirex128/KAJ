@@ -33,18 +33,17 @@
         <img id="coin-image" src="Myimages/coin.jpg" alt="Coin">
         <span id="gold-amount">0</span>
     </div>
-    <p id="enemy-health">Enemy Health: 100</p>
-    <p id="units-count">Units: 0</p>
 
-    <br>
-    <button id="buy-unit-btn">Buy Unit (10 Gold)</button>
+
+
 </div>
-
+<audio id="background-music" src="Sounds/background-music-hd.mp3" loop></audio>
 <div class="dropdown">
-    <button class="dropbtn">Menu</button>
-    <div class="dropdown-content">
+    <button onclick="menuFunction()" class="dropbtn">Menu</button>
+    <div id="menuDropdown" class="dropdown-content">
         <button id="restart-btn">Restart</button>
-        <button id="load-btn">Load</button>
+        <button ondrop="dropHandler()"
+                ondragover="dragOverHandler()" id="load-btn">Load</button>
         <button id="save-btn">Save</button>
     </div>
 </div>
@@ -53,9 +52,8 @@
 <script src="EventListeners.js"></script>
 <script src="SaveLoadGame.js"></script>
 <script src="UpdateFunctions.js"></script>
+<script src="Enemies.js"></script>
 
-
-ddad
 
 </body>
 </html>

@@ -43,13 +43,8 @@ document.getElementById('mage-btn').addEventListener('click', () => chooseHero('
 document.getElementById('confirm-btn').addEventListener('click', confirmSelection);
 //document.getElementById('attack-btn').addEventListener('click', attackEnemy);
 //document.getElementById('special-btn').addEventListener('click', attackEnemy);
-document.getElementById('buy-unit-btn').addEventListener('click', () => {
-    if (gameState.gold >= 10) {
-        gameState.gold -= 10;
-        gameState.units.push({});
-        updateUI();
-    }
-});document.getElementById('warrior-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0097.png';
+
+document.getElementById('warrior-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0097.png';
 });
 document.addEventListener('DOMContentLoaded', (event) => {
     loadGameState();
@@ -102,3 +97,52 @@ document.addEventListener('click', (event) => {
 });
 
 
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function menuFunction() {
+    document.getElementById("menuDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        let dropdowns = document.getElementsByClassName("dropdown-content");
+        let i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+function dropHandler(ev) {
+    console.log("File(s) dropped");
+
+    // Prevent default behavior (Prevent file from being opened)
+    ev.preventDefault();
+
+    if (ev.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...ev.dataTransfer.items].forEach((item, i) => {
+            // If dropped items aren't files, reject them
+            if (item.kind === "file") {
+                const file = item.getAsFile();
+                console.log(`… file[${i}].name = ${file.name}`);
+            }
+        });
+    } else {
+        // Use DataTransfer interface to access the file(s)
+        [...ev.dataTransfer.files].forEach((file, i) => {
+            console.log(`… file[${i}].name = ${file.name}`);
+        });
+    }
+}
+
+function dragOverHandler(ev) {
+    console.log("File(s) in drop zone");
+
+    // Prevent default behavior (Prevent file from being opened)
+    ev.preventDefault();
+}

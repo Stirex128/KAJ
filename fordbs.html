@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Relační model</title>
+</head>
+<body>
+<h1>Relační model</h1>
+<ul>
+    <li>Zaměstnanec(<u>Jméno, Datum_narození</u>, <u>Rodné_číslo</u>, Telefon, Role, PSČ, Město, Ulice, Oddělení_zaměření, Oddělení_budova)
+        <ul>
+            <li>FK: (Oddělení_zaměření, Oddělení_budova) ⊆ Oddělení(Zaměření, Budova)</li>
+        </ul>
+    </li>
+    <li>Oddělení(<u>Zaměření, Budova</u>, Maximální_počet_zaměstnanců, zaměstnanec)
+
+    </li>
+    <li>Webovky(<u>Doména</u>, Oddělení_zaměření, Oddělení_budova)
+        <ul>
+            <li>FK: (Oddělení_zaměření, Oddělení_budova) ⊆ Oddělení(Zaměření, Budova)</li>
+        </ul>
+    </li>
+    <li>Nadřízený(<u>Zaměstnanec, Nadřízený</u>)
+        <ul>
+            <li>FK: Zaměstnanec ⊆ Zaměstnanec(rodné číslo)</li>
+            <li>FK: Nadřízený ⊆ Zaměstnanec(rodné číslo)</li>
+        </ul>
+    </li>
+    <li>Pracovní smlouva(<u>Počátek, Zaměstnanec</u>, Konec, Úvazek)</li>
+        <ul>
+            <li>
+                FK: Zaměstnanec ⊆ Zaměstnanec(rodne číslo)
+            </li>
+        </ul>
+    <li>Docházka plán(<u>Počátek, Konec, Datum</u>, Povolené_přestávky, zaměstnanec)
+        <ul>
+            <li>FK: Zaměstnanec ⊆ Zaměstnanec(rodné číslo)</li>
+        </ul>
+    </li>
+    <li>Operace(<u>Časová_známka</u>, Validní?, Docházka plán)</li>
+    <ul>
+        <li>FK: Docházka plán ⊆ Docházka plán(rodné číslo)</li>
+    </ul>
+    <li>Příchod(<u>Časová_známka</u>, Zpoždění, Důvod_zpoždění)
+        <ul>
+            <li>FK: Operace ⊆ Operace(Časová_známka)</li>
+        </ul>
+    </li>
+    <li>Odchod(<u>Časová_známka</u>, Přesčas)
+        <ul>
+            <li>FK: Operace ⊆ Operace(Časová_známka)</li>
+        </ul>
+    </li>
+</ul>
+
+</body>
+</html>
