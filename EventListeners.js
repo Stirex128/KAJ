@@ -68,19 +68,24 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
 
-document.getElementById('menu-btn').addEventListener('click', () => {
-    document.getElementById('menu-panel').classList.toggle('hidden');
-});
-
-document.addEventListener('click', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-btn');
     const menuPanel = document.getElementById('menu-panel');
 
-    if (!menuBtn.contains(event.target) && !menuPanel.contains(event.target)) {
-        menuPanel.classList.add('hidden');
+    if (menuBtn && menuPanel) {
+        menuBtn.addEventListener('click', () => {
+            menuPanel.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!menuBtn.contains(event.target) && !menuPanel.contains(event.target)) {
+                menuPanel.classList.add('hidden');
+            }
+        });
+    } else {
+        console.error('menu-btn or menu-panel element not found.');
     }
 });
-
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -131,3 +136,80 @@ function dragOverHandler(ev) {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const coinContainer = document.getElementById('coin-container');
+    let shopMenu = document.getElementById('shop-menu');
+
+    if (coinContainer) {
+        console.log('coin-container nalezen. Přidávám posluchač události.');
+
+        coinContainer.addEventListener('click', () => {
+            console.log('Kliknutí na coin-container detekováno.');
+
+            // Pozastavení herní smyčky
+            window.gamePaused = true;
+            console.log('Herní smyčka pozastavena.');
+
+            // Zobrazení shop menu
+            if (!shopMenu) {
+                console.log('Shop menu neexistuje, vytvářím nový element.');
+                shopMenu = document.createElement('div');
+                shopMenu.id = 'shop-menu';
+                shopMenu.innerHTML = `
+                    <h1>Shop Menu</h1>
+                    ${'<p>Item</p>'.repeat(10)} <!-- 10x opakování textu -->
+                    <button id="close-shop-btn">Close</button>
+                `;
+                document.body.appendChild(shopMenu);
+
+                // Stylování menu
+                shopMenu.style.position = 'fixed';
+                shopMenu.style.top = '50%';
+                shopMenu.style.left = '50%';
+                shopMenu.style.transform = 'translate(-50%, -50%)';
+                shopMenu.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                shopMenu.style.color = 'white';
+                shopMenu.style.padding = '20px';
+                shopMenu.style.borderRadius = '10px';
+                shopMenu.style.zIndex = '1000';
+                shopMenu.style.textAlign = 'center';
+                shopMenu.style.width = '300px';
+                shopMenu.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+            }
+
+            // Zobrazení menu
+            shopMenu.classList.remove('hidden');
+
+            // Přidání funkce pro zavření menu
+            const closeButton = document.getElementById('close-shop-btn');
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    console.log('Kliknutí na tlačítko zavření detekováno.');
+                    shopMenu.classList.add('hidden');
+                    window.gamePaused = false; // Obnovení herní smyčky
+                    console.log('Herní smyčka obnovena.');
+                    requestAnimationFrame(gameLoop); // Restart game loop
+                });
+            }
+        });
+
+        // Zavření shop menu při kliknutí mimo něj
+        document.addEventListener('click', (event) => {
+            if (
+                shopMenu &&
+                !shopMenu.classList.contains('hidden') &&
+                !shopMenu.contains(event.target) &&
+                !coinContainer.contains(event.target)
+            ) {
+                console.log('Kliknutí mimo shop menu detekováno.');
+                shopMenu.classList.add('hidden');
+                window.gamePaused = false; // Obnovení herní smyčky
+                console.log('Herní smyčka obnovena.');
+                requestAnimationFrame(gameLoop); // Restart game loop
+            }
+        });
+    } else {
+        console.error('Element s ID "coin-container" nebyl nalezen.');
+    }
+});

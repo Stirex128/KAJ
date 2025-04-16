@@ -14,6 +14,7 @@ function saveGameState() {
         gold: gameState.gold,
         heroPosition: heroPosition
     };
+    console.log("test")
     setCookie('gameState', JSON.stringify(stateToSave), 365); // Uložit na rok
 }
 function loadGameState() {
@@ -22,6 +23,7 @@ function loadGameState() {
         const parsedState = JSON.parse(savedState);
 
         if (parsedState.hero) {
+            // Inicializace hrdiny
             gameState.hero = new Hero(
                 parsedState.hero.name,
                 parsedState.hero.health,
@@ -31,11 +33,14 @@ function loadGameState() {
                 parsedState.hero.sprite
             );
 
-            // Switch to game area
+            // Synchronizace s window.gameState
+            window.gameState.hero = gameState.hero;
+
+            // Přepnutí do herní oblasti
             document.getElementById('hero-selection').classList.add('hidden');
             document.getElementById('game-area').classList.remove('hidden');
 
-            // Set hero image
+            // Nastavení obrázku hrdiny
             const gameHeroImage = document.getElementById('game-hero-image');
             gameHeroImage.src = gameState.hero.sprite;
             gameHeroImage.style.width = '100px';
@@ -43,14 +48,14 @@ function loadGameState() {
             gameHeroImage.style.imageRendering = 'pixelated';
             gameHeroImage.style.position = 'absolute';
 
-            // Set hero position immediately
+            // Obnovení pozice hrdiny
             if (parsedState.heroPosition) {
                 heroPosition = parsedState.heroPosition;
-                gameState.heroPosition = parsedState.heroPosition;
+                window.gameState.heroPosition = heroPosition; // Synchronizace pozice
                 updateHeroPosition();
             }
 
-            // Restore other values
+            // Obnovení dalších hodnot
             gameState.units = parsedState.units;
             gameState.enemyHealth = parsedState.enemyHealth;
             gameState.gold = parsedState.gold;

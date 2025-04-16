@@ -53,7 +53,7 @@ class Enemy {
         const currentTime = Date.now();
         if (currentTime - this.lastAttackTime < 1000) return; // Attack cooldown
 
-        const heroPos = window.gameState.heroPosition;
+        const heroPos = window.gameState.heroPosition; // Ensure hero position is synchronized
         if (!heroPos) return;
 
         const dx = this.position.x - heroPos.x;
@@ -194,6 +194,8 @@ window.canMove = true; // Ensure this is set to true
 
 // Modify the gameLoop function
 function gameLoop() {
+    if (window.gamePaused) return; // Stop the game loop if paused
+
     const currentTime = Date.now();
 
     // Handle movement
@@ -227,7 +229,6 @@ function gameLoop() {
     if (Math.random() < 0.001 && window.gameState.enemies.length < 5) {
         spawnEnemy();
     }
-
     // Continue the game loop
     requestAnimationFrame(gameLoop);
 }
