@@ -67,7 +67,7 @@ function updateHPBar() {
 function updateHeroHealthBar(currentHealth) {
     const hpBar = document.getElementById('hp-bar');
     if (!gameState.hero) return;
-
+    console.log(`Updating hero health bar. Current health: ${currentHealth}`);
     const maxHP = gameState.hero.name === 'Warrior' ? 120 : 80;
     const hpPercentage = (currentHealth / maxHP) * 100;
 

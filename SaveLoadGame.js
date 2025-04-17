@@ -14,14 +14,14 @@ function saveGameState() {
         gold: gameState.gold,
         heroPosition: heroPosition
     };
-    console.log("test")
+    console.log("Saving game state:", stateToSave);
     setCookie('gameState', JSON.stringify(stateToSave), 365); // Uložit na rok
 }
 function loadGameState() {
     const savedState = getCookie('gameState');
     if (savedState) {
         const parsedState = JSON.parse(savedState);
-
+        console.log("Loading game state:", parsedState);
         if (parsedState.hero) {
             // Inicializace hrdiny
             gameState.hero = new Hero(
