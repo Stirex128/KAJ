@@ -7,59 +7,56 @@
     <link rel="stylesheet" href="MainGame.css?v=1">
 </head>
 <body>
-<div class="container" id="hero-selection">
-    <h1>Choose Your Hero</h1>
-    <div class="hero-image-container">
-        <img id="hero-image" src="" alt="Selected Hero">
-    </div>
-    <div>
-        <button id="warrior-btn">Choose Warrior</button>
-        <p id="warrior-stats" class="hidden">Health: 120 | Attack: 10 | Defense: 8</p>
-    </div>
-    <div>
-        <button id="mage-btn">Choose Mage</button>
-        <p id="mage-stats" class="hidden">Health: 80 | Attack: 5 | Magic: 40</p>
-    </div>
-    <br>
-    <button id="confirm-btn" class="hidden">Confirm Selection</button>
-</div>
+<header>
+    <nav class="dropdown">
+        <button onclick="menuFunction()" class="dropbtn">Menu</button>
+        <div id="menuDropdown" class="dropdown-content">
+            <button id="restart-btn">Restart</button>
+            <button ondrop="dropHandler()" ondragover="dragOverHandler()" id="load-btn">Load</button>
+            <button id="save-btn">Save</button>
+        </div>
+    </nav>
+</header>
 
-<div class="container hidden" id="game-area">
-    <div class="hero-container">
-        <img id="hp-bar" src="Myimages/Full.png" alt="HP Bar" class="hp-bar">
-        <img id="game-hero-image" src="" alt="Your Hero">
-    </div>
-    <div id="coin-container">
-        <img id="coin-image" src="Myimages/coin.jpg" alt="Coin">
-        <span id="gold-amount">0</span>
-    </div>
+<main>
+    <section class="container" id="hero-selection">
+        <h1>Choose Your Hero</h1>
+        <figure class="hero-image-container">
+            <img id="hero-image" src="" alt="Selected Hero">
+        </figure>
+        <article>
+            <button id="warrior-btn">Choose Warrior</button>
+            <p id="warrior-stats" class="hidden">Health: 120 | Attack: 10 | Defense: 8</p>
+        </article>
+        <article>
+            <button id="mage-btn">Choose Mage</button>
+            <p id="mage-stats" class="hidden">Health: 80 | Attack: 5 | Magic: 40</p>
+        </article>
+        <br>
+        <button id="confirm-btn" class="hidden">Confirm Selection</button>
+    </section>
 
+    <section class="container hidden" id="game-area">
+        <figure class="hero-container">
+            <img id="hp-bar" src="Myimages/Full.png" alt="HP Bar" class="hp-bar">
+            <img id="game-hero-image" src="" alt="Your Hero">
+        </figure>
 
+        <aside id="coin-container">
+            <img id="coin-image" src="Myimages/coin.jpg" alt="Coin">
+            <span id="gold-amount">0</span>
+        </aside>
+    </section>
 
-</div>
+    <section id="shop-menu" class="hidden">
+        <h1>Shop Menu</h1>
+    </section>
+
+    <canvas id="attack-canvas"></canvas>
+</main>
+
 <audio id="background-music" src="Sounds/background-music-hd.mp3" loop></audio>
-<div class="dropdown">
-    <button onclick="menuFunction()" class="dropbtn">Menu</button>
-    <div id="menuDropdown" class="dropdown-content">
-        <button id="restart-btn">Restart</button>
-        <button ondrop="dropHandler()"
-                ondragover="dragOverHandler()" id="load-btn">Load</button>
-        <button id="save-btn">Save</button>
-    </div>
-</div>
-<div id="shop-menu" class="hidden">
-    <h1>Shop Menu</h1>
-    <p>Item 1</p>
-    <p>Item 2</p>
-    <p>Item 3</p>
-    <p>Item 4</p>
-    <p>Item 5</p>
-    <p>Item 6</p>
-    <p>Item 7</p>
-    <p>Item 8</p>
-    <p>Item 9</p>
-    <p>Item 10</p>
-</div>
+
 <script src="gamestate.js"></script>
 <script src="SaveLoadGame.js"></script>
 <script src="UpdateFunctions.js"></script>
@@ -68,7 +65,6 @@
 <script src="EventListeners.js"></script>
 <script src="Enemies.js"></script>
 <script src="shop.js"></script>
-
-
+<script src="CanvasAnimations.js"></script>
 </body>
 </html>

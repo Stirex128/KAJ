@@ -111,7 +111,7 @@ if (!window.gameState.enemies) {
 // Funkce pro vytvoření nepřítele
 function spawnEnemy() {
     console.log("Vytvářím nepřítele...");
-    // In the spawnEnemy function, adjust the speeds:
+    // Enemy type definitions as before
     const types = [
         { type: 'Mouse', health: 30, damage: 5, speed: 1.5, sprite: 'Tiles/tile_0123.png' },
         { type: 'Spider', health: 20, damage: 3, speed: 2.0, sprite: 'Tiles/tile_0122.png' },
@@ -129,8 +129,8 @@ function spawnEnemy() {
 
     console.log(`Vytvořen ${enemy.type} na pozici [${enemy.position.x}, ${enemy.position.y}]`);
 
-    // Vytvoření elementu pro nepřítele
-    const enemyElement = document.createElement('div');
+    // Create semantic element for enemy
+    const enemyElement = document.createElement('article');
     enemyElement.className = 'enemy';
     enemyElement.style.position = 'absolute';
     enemyElement.style.left = `${enemy.position.x}px`;
@@ -139,7 +139,7 @@ function spawnEnemy() {
     enemyElement.style.height = '80px';
     enemyElement.style.zIndex = '100';
 
-    // Vytvoření PNG health baru jako má hrdina
+    // Health bar image
     const healthBarImg = document.createElement('img');
     healthBarImg.src = 'Myimages/Full.png';
     healthBarImg.style.position = 'absolute';
@@ -148,10 +148,11 @@ function spawnEnemy() {
     healthBarImg.style.width = '50px';
     healthBarImg.style.height = 'auto';
     healthBarImg.style.zIndex = '101';
+    healthBarImg.alt = `${enemy.type} health`;
     enemy.healthBarImg = healthBarImg;
 
-    // Přidání textu s typem nepřítele
-    const enemyTypeLabel = document.createElement('div');
+    // Enemy name label using figcaption
+    const enemyTypeLabel = document.createElement('figcaption');
     enemyTypeLabel.textContent = enemy.type;
     enemyTypeLabel.style.position = 'absolute';
     enemyTypeLabel.style.bottom = '-20px';
@@ -161,6 +162,11 @@ function spawnEnemy() {
     enemyTypeLabel.style.textShadow = '1px 1px 2px black';
     enemyTypeLabel.style.fontSize = '12px';
 
+    // Enemy sprite in a figure
+    const enemyFigure = document.createElement('figure');
+    enemyFigure.style.margin = '0';
+    enemyFigure.style.padding = '0';
+
     const enemySprite = document.createElement('img');
     enemySprite.src = enemy.sprite;
     enemySprite.style.width = '64px';
@@ -169,9 +175,11 @@ function spawnEnemy() {
     enemySprite.style.position = 'absolute';
     enemySprite.style.bottom = '0';
     enemySprite.style.left = '0';
+    enemySprite.alt = enemy.type;
 
+    enemyFigure.appendChild(enemySprite);
     enemyElement.appendChild(healthBarImg);
-    enemyElement.appendChild(enemySprite);
+    enemyElement.appendChild(enemyFigure);
     enemyElement.appendChild(enemyTypeLabel);
 
     const gameArea = document.getElementById('game-area');
@@ -188,11 +196,12 @@ function spawnEnemy() {
 }
 
 // Herní smyčka pro aktualizaci nepřátel
-// Herní smyčka pro aktualizaci nepřátel
-// Fix in Enemies.js - near the top after the enemy class
 window.canMove = true; // Ensure this is set to true
 
 // Modify the gameLoop function
+let loopCounter = 0; // Counter for game loop iterations
+const saveInterval = 100; // Save every 100 game loops (adjust as needed)
+
 function gameLoop() {
     if (window.gamePaused) return; // Stop the game loop if paused
 
@@ -229,9 +238,19 @@ function gameLoop() {
     if (Math.random() < 0.001 && window.gameState.enemies.length < 5) {
         spawnEnemy();
     }
+
+    // Increment loop counter and save game state every `saveInterval` loops
+    loopCounter++;
+    if (loopCounter >= saveInterval) {
+        saveGameState();
+        loopCounter = 0; // Reset the counter
+    }
+
     // Continue the game loop
     requestAnimationFrame(gameLoop);
 }
+
+
 
 // Funkce pro inicializaci nepřátel
 function initializeEnemies() {

@@ -156,11 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Shop menu neexistuje, vytvářím nový element.');
                 shopMenu = document.createElement('div');
                 shopMenu.id = 'shop-menu';
-                shopMenu.innerHTML = `
-                    <h1>Shop Menu</h1>
-                    ${'<p>Item</p>'.repeat(10)} <!-- 10x opakování textu -->
-                    <button id="close-shop-btn">Close</button>
-                `;
+
+
                 document.body.appendChild(shopMenu);
 
                 // Stylování menu
@@ -177,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 shopMenu.style.width = '300px';
                 shopMenu.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
             }
-
+            renderShopItems(shopItems);
             // Zobrazení menu
             shopMenu.classList.remove('hidden');
 
@@ -211,5 +208,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error('Element s ID "coin-container" nebyl nalezen.');
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'q' && canMove) {
+        animateSwordSwing();
+    }
+});
+
+// Přidat posluchač pro změnu velikosti okna
+window.addEventListener('resize', () => {
+    const canvas = document.getElementById('attack-canvas');
+    if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+});
+
+// Inicializovat canvas při načtení stránky
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('attack-canvas');
+    if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
 });

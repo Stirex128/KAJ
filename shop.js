@@ -19,7 +19,7 @@ class ShopItem {
 
 // Example items
 const shopItems = [
-    new ShopItem('Health Potion', 50, { row: 1, column: 1 }, (hero) => {
+    new ShopItem('Health Potion', 10, { row: 1, column: 1 }, (hero) => {
         hero.health = Math.min(hero.health + 20, 120); // Heal the hero
         console.log('Hero healed by 20 HP!');
     }, 'Tiles/tile_0115.png'),
@@ -32,16 +32,23 @@ const shopItems = [
 
 function renderShopItems(shopItems) {
     const shopMenu = document.getElementById('shop-menu');
-    shopMenu.innerHTML = '<h1>Shop Menu</h1>'; // Vymazání a přidání nadpisu
-    shopMenu.style.position = 'relative'; // Relativní pozice pro absolutní umístění položek
 
+    // Clear all existing content in the shop menu
+    shopMenu.innerHTML = '<h1>Shop Menu</h1>'; // Retain the title
+
+    // Create a container for the shop items
+    const itemsContainer = document.createElement('div');
+    itemsContainer.id = 'shop-items-container';
+    itemsContainer.style.display = 'flex';
+    itemsContainer.style.flexDirection = 'column';
+    itemsContainer.style.alignItems = 'center';
+
+    // Add each shop item dynamically
     shopItems.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.className = 'shop-item';
-        itemElement.style.position = 'absolute'; // Absolutní pozice
-        itemElement.style.top = `${item.position.row * 100}px`; // Vertikální pozice
-        itemElement.style.left = `${item.position.column * 100}px`; // Horizontální pozice
         itemElement.style.margin = '10px';
+        itemElement.style.textAlign = 'center';
 
         const itemImage = document.createElement('img');
         itemImage.src = item.image;
@@ -66,20 +73,9 @@ function renderShopItems(shopItems) {
             }
         });
 
-        shopMenu.appendChild(itemElement);
+        itemsContainer.appendChild(itemElement);
     });
 
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.style.position = 'absolute';
-    closeButton.style.bottom = '10px';
-    closeButton.style.left = '50%';
-    closeButton.style.transform = 'translateX(-50%)';
-    closeButton.addEventListener('click', () => {
-        shopMenu.classList.add('hidden');
-        window.gamePaused = false;
-        requestAnimationFrame(gameLoop);
-    });
-
-    shopMenu.appendChild(closeButton);
+    // Append the items container to the shop menu
+    shopMenu.appendChild(itemsContainer);
 }

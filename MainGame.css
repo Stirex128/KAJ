@@ -126,6 +126,7 @@ html, body {
     transition: width 0.3s, background-color 0.3s;
 }
 
+
 #shop-menu {
     position: fixed;
     top: 50%;
@@ -139,4 +140,155 @@ html, body {
     text-align: center;
     width: 300px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Add these to your MainGame.css */
+
+/* Add transitions and transforms with prefixes */
+.hero-container {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#game-hero-image {
+    width: 100px;
+    height: auto;
+    position: relative;
+    display: block;
+    -webkit-transition: transform 0.2s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out;
+    -ms-transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Add animation for enemy sprites */
+.enemy img {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    -webkit-filter: drop-shadow(0 0 3px rgba(255, 0, 0, 0.7));
+    -moz-filter: drop-shadow(0 0 3px rgba(255, 0, 0, 0.7));
+    filter: drop-shadow(0 0 3px rgba(255, 0, 0, 0.7));
+}
+
+/* Pulse animation for enemies */
+@-webkit-keyframes enemyPulse {
+    0% { -webkit-transform: scale(1); transform: scale(1); }
+    50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
+    100% { -webkit-transform: scale(1); transform: scale(1); }
+}
+@-moz-keyframes enemyPulse {
+    0% { -moz-transform: scale(1); transform: scale(1); }
+    50% { -moz-transform: scale(1.05); transform: scale(1.05); }
+    100% { -moz-transform: scale(1); transform: scale(1); }
+}
+@keyframes enemyPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.enemy {
+    transition: transform 0.1s;
+    -webkit-transition: transform 0.1s;
+    -moz-transition: transform 0.1s;
+    -ms-transition: transform 0.1s;
+    -webkit-animation: enemyPulse 2s infinite;
+    -moz-animation: enemyPulse 2s infinite;
+    animation: enemyPulse 2s infinite;
+}
+
+.enemy.attacking {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+    -webkit-filter: brightness(1.2);
+    -moz-filter: brightness(1.2);
+    filter: brightness(1.2);
+}
+
+/* Shop menu with gradient and shadow effects */
+#shop-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.9), rgba(20,20,40,0.8));
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.9), rgba(20,20,40,0.8));
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(20,20,40,0.8));
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    text-align: center;
+    width: 300px;
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Button hover effects */
+button {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    -webkit-box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    -moz-box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Enhanced shop items */
+.shop-item {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(top, rgba(60,60,80,0.4), rgba(40,40,60,0.4));
+    background: -moz-linear-gradient(top, rgba(60,60,80,0.4), rgba(40,40,60,0.4));
+    background: linear-gradient(to bottom, rgba(60,60,80,0.4), rgba(40,40,60,0.4));
+    cursor: pointer;
+}
+
+.shop-item:hover {
+    -webkit-transform: translateY(-3px);
+    -moz-transform: translateY(-3px);
+    -ms-transform: translateY(-3px);
+    transform: translateY(-3px);
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Canvas animation */
+#attack-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    -webkit-filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.7));
+    -moz-filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.7));
+    filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.7));
 }

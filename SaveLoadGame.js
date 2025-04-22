@@ -9,8 +9,6 @@ function saveGameState() {
             specialValue: gameState.hero.specialValue,
             sprite: gameState.hero.sprite
         },
-        units: gameState.units,
-        enemyHealth: gameState.enemyHealth,
         gold: gameState.gold,
         heroPosition: heroPosition
     };
