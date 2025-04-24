@@ -3,6 +3,7 @@ function saveGameState() {
     const stateToSave = {
         hero: {
             name: gameState.hero.name,
+            displayName: gameState.hero.displayName || gameState.hero.name,
             health: gameState.hero.health,
             attackPower: gameState.hero.attackPower,
             specialAttribute: gameState.hero.specialAttribute,
@@ -21,7 +22,7 @@ function loadGameState() {
         const parsedState = JSON.parse(savedState);
         console.log("Loading game state:", parsedState);
         if (parsedState.hero) {
-            // Inicializace hrdiny
+            // Initialize hero object
             gameState.hero = new Hero(
                 parsedState.hero.name,
                 parsedState.hero.health,
@@ -30,15 +31,13 @@ function loadGameState() {
                 parsedState.hero.specialValue,
                 parsedState.hero.sprite
             );
-
-            // Synchronizace s window.gameState
+            gameState.hero.displayName = parsedState.hero.displayName || parsedState.hero.name;
+            // Synchronize with window.gameState
             window.gameState.hero = gameState.hero;
-
-            // Přepnutí do herní oblasti
             document.getElementById('hero-selection').classList.add('hidden');
             document.getElementById('game-area').classList.remove('hidden');
 
-            // Nastavení obrázku hrdiny
+            // Set up hero image
             const gameHeroImage = document.getElementById('game-hero-image');
             gameHeroImage.src = gameState.hero.sprite;
             gameHeroImage.style.width = '100px';
@@ -46,20 +45,25 @@ function loadGameState() {
             gameHeroImage.style.imageRendering = 'pixelated';
             gameHeroImage.style.position = 'absolute';
 
-            // Obnovení pozice hrdiny
+            // Use the centralized function to create/update the hero name label
+            const heroContainer = document.querySelector('.hero-container');
+            if (heroContainer) {
+                createOrUpdateHeroNameLabel(heroContainer, gameState.hero.displayName);
+            }
+
+            // Restore hero position
             if (parsedState.heroPosition) {
                 heroPosition = parsedState.heroPosition;
-                window.gameState.heroPosition = heroPosition; // Synchronizace pozice
                 updateHeroPosition();
             }
 
-            // Obnovení dalších hodnot
-            gameState.units = parsedState.units;
-            gameState.enemyHealth = parsedState.enemyHealth;
-            gameState.gold = parsedState.gold;
-
-            canMove = true;
+            // Restore other values
+            gameState.gold = parsedState.gold || 0;
             updateUI();
+            canMove = true;
+
+            // Initialize enemies and start game loop after loading game
+            initializeEnemies();
         }
     }
 }

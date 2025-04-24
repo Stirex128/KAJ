@@ -90,3 +90,33 @@ function updateHeroHealthBar(currentHealth) {
 
     hpBar.src = `Myimages/${hpImage}`;
 }
+
+
+function createOrUpdateHeroNameLabel(container, name) {
+    // Remove any existing label first
+    const existingLabel = document.getElementById('hero-name-label');
+    if (existingLabel) existingLabel.remove();
+
+    // Create new label
+    const heroNameLabel = document.createElement('figcaption');
+    heroNameLabel.id = 'hero-name-label';
+    heroNameLabel.textContent = name;
+
+    // Apply consistent styling
+    heroNameLabel.style.position = 'absolute';
+    heroNameLabel.style.bottom = '-120px';
+    heroNameLabel.style.left = '10px';
+    heroNameLabel.style.width = '100%';
+    heroNameLabel.style.textAlign = 'center';
+    heroNameLabel.style.color = 'black';
+    heroNameLabel.style.textShadow = '1px 1px 2px black';
+    heroNameLabel.style.fontSize = '14px';
+    heroNameLabel.style.fontWeight = 'bold';
+
+    // Add to container
+    if (container) {
+        container.appendChild(heroNameLabel);
+    }
+
+    return heroNameLabel;
+}

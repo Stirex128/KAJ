@@ -68,7 +68,7 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+/*document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-btn');
     const menuPanel = document.getElementById('menu-panel');
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('menu-btn or menu-panel element not found.');
     }
-});
+});*/
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */

@@ -49,11 +49,37 @@ function chooseHero(type) {
         document.getElementById('hero-image').style.height = 'auto';
         document.getElementById('hero-image').style.imageRendering = 'pixelated';
     }
+
+    // Remove any existing form first
+    const existingForm = document.getElementById('hero-name-form');
+    if (existingForm) {
+        existingForm.parentNode.removeChild(existingForm);
+    }
+
+    // Create a new form and add it to the current hero stats container
+    const formHtml = `
+        <form id="hero-name-form" class="name-form">
+            <label for="hero-name-input">Enter your hero's name:</label>
+            <input type="text" id="hero-name-input" placeholder="Enter name..." maxlength="20" autofocus required>
+        </form>
+    `;
+    const formContainer = document.createElement('div');
+    formContainer.innerHTML = formHtml;
+    document.getElementById(type === 'warrior' ? 'warrior-stats' : 'mage-stats').appendChild(formContainer);
+
+    document.getElementById('hero-name-input').focus();
     document.getElementById('confirm-btn').classList.remove('hidden');
 }
 
 // Confirm hero selection
 function confirmSelection() {
+    // Get the hero name from the input
+    const nameInput = document.getElementById('hero-name-input');
+    const heroName = nameInput ? nameInput.value.trim() : '';
+
+    // Set a default name if empty
+    gameState.hero.displayName = heroName || gameState.hero.name;
+
     document.getElementById('hero-selection').classList.add('hidden');
     document.getElementById('game-area').classList.remove('hidden');
     const gameHeroImage = document.getElementById('game-hero-image');
@@ -63,16 +89,21 @@ function confirmSelection() {
     gameHeroImage.style.imageRendering = 'pixelated';
     gameHeroImage.style.position = 'absolute';
     window.gameState.hero = gameState.hero;
+
     const hpBar = document.getElementById('hp-bar');
-    if (hpBar) {
-        hpBar.style.display = 'none';
-        setTimeout(() => {
-            hpBar.style.display = 'block';
-        }, 100);
+    const heroContainer = document.querySelector('.hero-container');
+
+    // Use the centralized function to create/update the hero name label
+    if (heroContainer) {
+        createOrUpdateHeroNameLabel(heroContainer, gameState.hero.displayName);
     }
+
     canMove = true;
     updateHeroPosition();
     saveGameState();
+
+    // Initialize enemies and start game loop after hero selection
+    initializeEnemies();
 }
 
 // Attack function

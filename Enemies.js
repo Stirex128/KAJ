@@ -255,29 +255,29 @@ function gameLoop() {
 // Funkce pro inicializaci nepřátel
 function initializeEnemies() {
     console.log("Inicializuji nepřátele...");
-    // Ujistit se, že pole enemies existuje
-    if (!window.gameState.enemies) {
+    // Clear existing enemies first to avoid duplicates
+    if (window.gameState.enemies) {
+        // Remove enemy elements from DOM
+        window.gameState.enemies.forEach(enemy => {
+            if (enemy.element) {
+                enemy.element.remove();
+            }
+        });
         window.gameState.enemies = [];
     }
 
-    // Vytvořit počáteční nepřátele
+    // Create initial enemies
     console.log("Vytvářím počáteční nepřátele");
     for (let i = 0; i < 3; i++) {
         spawnEnemy();
     }
 
-    // Spustit herní smyčku
+    // Start game loop
     console.log("Spouštím herní smyčku");
+    window.gameLoopActive = true;
     requestAnimationFrame(gameLoop);
 }
 
-// Odstraněno duplikované volání - ponecháváme pouze jednu inicializaci
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeEnemies);
-} else {
-    // Pokud je dokument již načten
-    initializeEnemies();
-}
 
 // Add this to your code to override the CSS filter
 document.addEventListener('DOMContentLoaded', () => {
