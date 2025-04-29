@@ -11,10 +11,11 @@ function saveGameState() {
             sprite: gameState.hero.sprite
         },
         gold: gameState.gold,
+        score: gameState.score, // Add this line
         heroPosition: heroPosition
     };
     console.log("Saving game state:", stateToSave);
-    setCookie('gameState', JSON.stringify(stateToSave), 365); // Uložit na rok
+    setCookie('gameState', JSON.stringify(stateToSave), 365);
 }
 function loadGameState() {
     const savedState = getCookie('gameState');
@@ -59,6 +60,7 @@ function loadGameState() {
 
             // Restore other values
             gameState.gold = parsedState.gold || 0;
+            gameState.score = parsedState.score || 0;
             updateUI();
             canMove = true;
 

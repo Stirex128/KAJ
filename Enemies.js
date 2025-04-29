@@ -1,17 +1,18 @@
 // Třída pro nepřátele s health bary jako má hrdina
 class Enemy {
-    constructor(type, health, damage, speed, sprite) {
+    constructor(type, health, damage, speed, sprite, points) {
         this.type = type;
         this.health = health;
         this.maxHealth = health;
         this.damage = damage;
         this.speed = speed;
         this.sprite = sprite;
+        this.points = points;  // Add points value
         this.position = {
             x: Math.random() * (window.innerWidth - 100),
             y: Math.random() * (window.innerHeight - 300) + 150
         };
-        this.direction = Math.random() * Math.PI * 2; // Náhodný směr v radiánech
+        this.direction = Math.random() * Math.PI * 2;
         this.element = null;
         this.healthBarImg = null;
         this.lastAttackTime = 0;
@@ -48,7 +49,6 @@ class Enemy {
         }
     }
 
-    // Updated attack method for Enemy class in Enemies.js
     attack(hero) {
         const currentTime = Date.now();
         if (currentTime - this.lastAttackTime < 1000) return; // Attack cooldown
@@ -111,11 +111,10 @@ if (!window.gameState.enemies) {
 // Funkce pro vytvoření nepřítele
 function spawnEnemy() {
     console.log("Vytvářím nepřítele...");
-    // Enemy type definitions as before
     const types = [
-        { type: 'Mouse', health: 30, damage: 5, speed: 1.5, sprite: 'Tiles/tile_0123.png' },
-        { type: 'Spider', health: 20, damage: 3, speed: 2.0, sprite: 'Tiles/tile_0122.png' },
-        { type: 'Ghost', health: 50, damage: 8, speed: 1.0, sprite: 'Tiles/tile_0121.png' }
+        { type: 'Mouse', health: 30, damage: 5, speed: 1.5, sprite: 'Tiles/tile_0123.png', points: 10 },
+        { type: 'Spider', health: 20, damage: 3, speed: 2.0, sprite: 'Tiles/tile_0122.png', points: 5 },
+        { type: 'Ghost', health: 50, damage: 8, speed: 1.0, sprite: 'Tiles/tile_0121.png', points: 15 }
     ];
 
     const randomType = types[Math.floor(Math.random() * types.length)];
@@ -124,7 +123,8 @@ function spawnEnemy() {
         randomType.health,
         randomType.damage,
         randomType.speed,
-        randomType.sprite
+        randomType.sprite,
+        randomType.points
     );
 
     console.log(`Vytvořen ${enemy.type} na pozici [${enemy.position.x}, ${enemy.position.y}]`);
@@ -195,7 +195,6 @@ function spawnEnemy() {
     console.log(`Počet nepřátel: ${window.gameState.enemies.length}`);
 }
 
-// Herní smyčka pro aktualizaci nepřátel
 window.canMove = true; // Ensure this is set to true
 
 // Modify the gameLoop function
@@ -252,7 +251,6 @@ function gameLoop() {
 
 
 
-// Funkce pro inicializaci nepřátel
 function initializeEnemies() {
     console.log("Inicializuji nepřátele...");
     // Clear existing enemies first to avoid duplicates
@@ -279,7 +277,6 @@ function initializeEnemies() {
 }
 
 
-// Add this to your code to override the CSS filter
 document.addEventListener('DOMContentLoaded', () => {
     // Create a style element
     const styleElement = document.createElement('style');

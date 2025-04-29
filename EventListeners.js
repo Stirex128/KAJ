@@ -1,5 +1,4 @@
 // Setup event listeners
-// Add this to your EventListeners.js
 document.getElementById('save-btn').addEventListener('click', () => {
     const gameStateData = getCookie('gameState');
     if (gameStateData) {
@@ -8,6 +7,7 @@ document.getElementById('save-btn').addEventListener('click', () => {
 
         const a = document.createElement('a');
         a.href = url;
+
         a.download = 'fantasy-game-save.json';
         document.body.appendChild(a);
         a.click();
@@ -56,10 +56,10 @@ document.getElementById('restart-btn').addEventListener('click', () => {
 document.getElementById('mage-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0084.png';
 });
 
-// Objekt pro sledování stisknutých kláves
+// ledování stisknutých kláves
 const keysPressed = {};
 
-// Události pro sledování stisknutí a uvolnění kláves
+// pro sledování stisknuti a uvolnění kláves
 document.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
 });
@@ -211,11 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'q' && canMove) {
-        animateSwordSwing();
-    }
-});
 
 // Přidat posluchač pro změnu velikosti okna
 window.addEventListener('resize', () => {

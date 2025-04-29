@@ -1,5 +1,4 @@
 // Fantasy Clicker Game - JavaScript Logic
-// Synchronize gameState with window.gameState
 
 
 if (!window.gameState) window.gameState = {};
@@ -71,7 +70,6 @@ function chooseHero(type) {
     document.getElementById('confirm-btn').classList.remove('hidden');
 }
 
-// Confirm hero selection
 function confirmSelection() {
     // Get the hero name from the input
     const nameInput = document.getElementById('hero-name-input');
@@ -107,52 +105,79 @@ function confirmSelection() {
 }
 
 // Attack function
-// Update the attackEnemy function in index.js
 function attackEnemy() {
     if (!gameState.hero) return;
+
+    console.log(`Attacking with Q - Enemies count: ${window.gameState.enemies.length}`);
 
     // Find the closest enemy
     let closestEnemy = null;
     let closestDistance = Infinity;
 
-    // Use gameState.enemies which is now properly initialized
-    gameState.enemies.forEach(enemy => {
+    // ALWAYS use window.gameState.enemies for consistency
+    for (const element of window.gameState.enemies) {
+        const enemy = element;
         const dx = enemy.position.x - heroPosition.x;
         const dy = enemy.position.y - heroPosition.y;
         const distance = Math.sqrt(dx*dx + dy*dy);
+
+        console.log(`Enemy: ${enemy.type}, Distance: ${distance}`);
 
         if (distance < closestDistance) {
             closestDistance = distance;
             closestEnemy = enemy;
         }
-    });
-
-    // Attack the closest enemy if within range (80px)
-    if (closestEnemy && closestDistance < 80) {
-        // Regular attack with Q
+    }
+    let distanceForAttack = 100; // Default distance for attack
+    if (gameState.hero.name === 'Mage') {
+        distanceForAttack = 500; // Adjusted distance for Mage
+    } else {
+        distanceForAttack = 150;
+    }
+    // Attack the closest enemy if within range (increased to 100px for better gameplay)
+    if (closestEnemy && closestDistance < distanceForAttack) {
+        console.log(`Attacking ${closestEnemy.type} at distance ${closestDistance}`);
         closestEnemy.health -= gameState.hero.attackPower;
-        console.log(`Hero attacks! ${closestEnemy.type} has ${closestEnemy.health}/${closestEnemy.maxHealth} health left.`);
+
+        // Choose the appropriate attack animation based on hero type
+        if (gameState.hero.name === 'Mage') {
+            animateMagicOrb(closestEnemy);
+        } else {
+            animateSwordSwing();
+        }
+
+        // Visual feedback for the attack
+        if (closestEnemy.element) {
+            closestEnemy.element.classList.add('attacking');
+            setTimeout(() => {
+                if (closestEnemy.element) {
+                    closestEnemy.element.classList.remove('attacking');
+                }
+            }, 200);
+        }
 
         // Update enemy health bar
         closestEnemy.updateHealthBar();
 
         // Check if enemy died from the attack
         if (closestEnemy.health <= 0) {
-            console.log(`${closestEnemy.type} was killed!`);
             if (closestEnemy.element && closestEnemy.element.parentNode) {
                 closestEnemy.element.parentNode.removeChild(closestEnemy.element);
             }
             gameState.gold += Math.floor(Math.random() * 5) + 3;
-            const index = gameState.enemies.indexOf(closestEnemy);
+            gameState.score += closestEnemy.points;
+            const index = window.gameState.enemies.indexOf(closestEnemy);
             if (index > -1) {
-                gameState.enemies.splice(index, 1);
+                window.gameState.enemies.splice(index, 1);
             }
         }
 
         // Update UI to show new gold amount
         updateUI();
+        return true; // Attack was successful
     } else {
-        console.log("No enemy in range to attack!");
+        console.log(`No enemy in range to attack! Closest distance: ${closestDistance}`);
+        return false; // No attack performed
     }
 }
 
@@ -194,7 +219,8 @@ function specialAttack() {
                     if (enemy.element && enemy.element.parentNode) {
                         enemy.element.parentNode.removeChild(enemy.element);
                     }
-                    gameState.gold += Math.floor(Math.random() * 5) + 3; // Give gold for killing
+                    gameState.gold += Math.floor(Math.random() * 5) + 3;
+                    gameState.score += enemy.points;// Give gold for killing
                     killedCount++;
 
                     const index = window.gameState.enemies.indexOf(enemy);
@@ -222,6 +248,30 @@ function animateAttack() {
     sprite.style.animation = 'none';  // Restart animace
     void sprite.offsetWidth;  // Reset animace trik
     sprite.style.animation = 'idle-animation 1s steps(6) infinite';
+
+    // Choose appropriate attack animation based on hero type
+    if (gameState.hero && gameState.hero.name === 'Mage') {
+        // Find the closest enemy for the magic orb
+        let closestEnemy = null;
+        let closestDistance = Infinity;
+
+        for (const enemy of window.gameState.enemies) {
+            const dx = enemy.position.x - heroPosition.x;
+            const dy = enemy.position.y - heroPosition.y;
+            const distance = Math.sqrt(dx*dx + dy*dy);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+
+        if (closestEnemy) {
+            animateMagicOrb(closestEnemy);
+        }
+    } else {
+        animateSwordSwing();
+    }
 }
 
 // Pozice postavy
@@ -232,6 +282,7 @@ window.onload = function() {
     const backgroundMusic = document.getElementById('background-music');
     if (backgroundMusic) {
         backgroundMusic.volume = 0.5; // Set volume (0.0 to 1.0)
+
         backgroundMusic.play().catch(err => {
             console.error("Failed to play background music:", err);
         });

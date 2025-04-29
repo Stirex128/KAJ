@@ -69,3 +69,104 @@ function animateSwordSwing() {
     };
 }
 
+function animateMagicOrb(targetEnemy) {
+    const canvas = document.getElementById('attack-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas to window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Load magic orb image
+    const orbImage = new Image();
+    orbImage.src = 'Tiles/tile_0111.png'; // Magic projectile image
+
+    // Orb dimensions
+    const orbSize = 32;
+
+    // Animation parameters
+    const duration = 500; // Animation duration in milliseconds
+    const startTime = performance.now();
+
+    // Start position (hero)
+    const startX = heroPosition.x;
+    const startY = heroPosition.y;
+
+    // End position (enemy)
+    const endX = targetEnemy.position.x + 32; // Center of enemy
+    const endY = targetEnemy.position.y + 32; // Center of enemy
+
+    orbImage.onload = () => {
+        console.log('Magic orb image loaded successfully');
+
+        function drawFrame(currentTime) {
+            // Calculate progress (0 to 1)
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate current position using linear interpolation
+            const currentX = startX + (endX - startX) * progress;
+            const currentY = startY + (endY - startY) * progress;
+
+            // Draw the magic orb
+            ctx.save();
+
+            // Add glow effect
+            ctx.shadowColor = '#5555FF';
+            ctx.shadowBlur = 15;
+
+            // Draw the orb
+            ctx.drawImage(
+                orbImage,
+                currentX - orbSize/2,
+                currentY - orbSize/2,
+                orbSize,
+                orbSize
+            );
+
+            ctx.restore();
+
+            // Continue animation if not complete
+            if (progress < 1) {
+                requestAnimationFrame(drawFrame);
+            } else {
+                // Add impact effect
+                drawImpact(endX, endY);
+
+                // Clear the canvas after impact effect
+                setTimeout(() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }, 200);
+            }
+        }
+
+        // Start the animation
+        requestAnimationFrame(drawFrame);
+    };
+
+    orbImage.onerror = () => {
+        console.error('Failed to load magic orb image.');
+    };
+
+    // Function to draw impact effect
+    function drawImpact(x, y) {
+        ctx.save();
+
+        // Create radial gradient for impact
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
+        gradient.addColorStop(0, 'rgba(100, 100, 255, 0.8)');
+        gradient.addColorStop(0.7, 'rgba(50, 50, 200, 0.5)');
+        gradient.addColorStop(1, 'rgba(0, 0, 150, 0)');
+
+        // Draw impact circle
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}

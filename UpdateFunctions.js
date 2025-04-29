@@ -14,7 +14,6 @@ function updateHeroPosition() {
     }
 }
 
-// Update UI
 function updateUI() {
     const enemyHealthElement = document.getElementById('enemy-health');
     if (enemyHealthElement) {
@@ -24,6 +23,12 @@ function updateUI() {
     const goldAmountElement = document.getElementById('gold-amount');
     if (goldAmountElement) {
         goldAmountElement.textContent = gameState.gold;
+    }
+
+    // Add score display update
+    const scoreAmountElement = document.getElementById('score-amount');
+    if (scoreAmountElement) {
+        scoreAmountElement.textContent = gameState.score || 0;
     }
 
     const unitsCountElement = document.getElementById('units-count');
@@ -63,7 +68,6 @@ function updateHPBar() {
     hpBar.src = `Myimages/${hpImage}`;
 }
 
-// Add this function to UpdateFunctions.js
 function updateHeroHealthBar(currentHealth) {
     const hpBar = document.getElementById('hp-bar');
     if (!gameState.hero) return;

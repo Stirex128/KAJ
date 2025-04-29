@@ -324,3 +324,42 @@ button:hover {
     color: #aaa;
     opacity: 0.7;
 }
+
+#score-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+#score-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+#score-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50; /* Green color for score */
+}
+
+/* Magic orb animation styles */
+.magic-impact {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: expand-fade 0.5s forwards;
+    background: radial-gradient(circle, rgba(100,100,255,0.8) 0%, rgba(50,50,200,0.5) 70%, rgba(0,0,150,0) 100%);
+}
+
+@keyframes expand-fade {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
