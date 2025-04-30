@@ -9,6 +9,29 @@ gameState.enemies = window.gameState.enemies;
 
 let canMove = false;
 
+const difficultySettings = {
+    easy: {
+        spawnRate: 0.0005,
+        maxEnemies: 3,
+        enemyMultiplier: 1.0
+    },
+    medium: {
+        spawnRate: 0.001,
+        maxEnemies: 5,
+        enemyMultiplier: 1.2
+    },
+    hard: {
+        spawnRate: 0.002,
+        maxEnemies: 8,
+        enemyMultiplier: 1.5
+    }
+};
+
+// Default to medium difficulty if not set
+if (!gameState.difficulty) {
+    gameState.difficulty = 'medium';
+}
+
 // Hero class
 class Hero {
     constructor(name, health, attackPower, specialAttribute, specialValue, sprite) {
@@ -70,6 +93,23 @@ function chooseHero(type) {
     document.getElementById('confirm-btn').classList.remove('hidden');
 }
 
+function handleEnemyDeath(enemy) {
+    // Remove enemy element from the DOM
+    if (enemy.element && enemy.element.parentNode) {
+        enemy.element.parentNode.removeChild(enemy.element);
+    }
+
+    // Update game state
+    gameState.gold += Math.floor(Math.random() * 5) + 3;
+    gameState.score += enemy.points;
+
+    // Remove from enemies array
+    const index = window.gameState.enemies.indexOf(enemy);
+    if (index > -1) {
+        window.gameState.enemies.splice(index, 1);
+    }
+}
+
 function confirmSelection() {
     // Get the hero name from the input
     const nameInput = document.getElementById('hero-name-input');
@@ -110,74 +150,107 @@ function attackEnemy() {
 
     console.log(`Attacking with Q - Enemies count: ${window.gameState.enemies.length}`);
 
-    // Find the closest enemy
-    let closestEnemy = null;
-    let closestDistance = Infinity;
+    // Define attack range based on hero type
+    let attackRange = gameState.hero.name === 'Mage' ? 300 : 100;
 
-    // ALWAYS use window.gameState.enemies for consistency
-    for (const element of window.gameState.enemies) {
-        const enemy = element;
-        const dx = enemy.position.x - heroPosition.x;
-        const dy = enemy.position.y - heroPosition.y;
-        const distance = Math.sqrt(dx*dx + dy*dy);
+    if (gameState.hero.name === 'Warrior') {
+        // For Warrior: Attack all enemies within range
+        let enemiesInRange = [];
 
-        console.log(`Enemy: ${enemy.type}, Distance: ${distance}`);
+        for (const enemy of window.gameState.enemies) {
+            const dx = enemy.position.x - heroPosition.x;
+            const dy = enemy.position.y - heroPosition.y;
+            const distance = Math.sqrt(dx*dx + dy*dy);
 
-        if (distance < closestDistance) {
-            closestDistance = distance;
-            closestEnemy = enemy;
-        }
-    }
-    let distanceForAttack = 100; // Default distance for attack
-    if (gameState.hero.name === 'Mage') {
-        distanceForAttack = 500; // Adjusted distance for Mage
-    } else {
-        distanceForAttack = 150;
-    }
-    // Attack the closest enemy if within range (increased to 100px for better gameplay)
-    if (closestEnemy && closestDistance < distanceForAttack) {
-        console.log(`Attacking ${closestEnemy.type} at distance ${closestDistance}`);
-        closestEnemy.health -= gameState.hero.attackPower;
-
-        // Choose the appropriate attack animation based on hero type
-        if (gameState.hero.name === 'Mage') {
-            animateMagicOrb(closestEnemy);
-        } else {
-            animateSwordSwing();
+            if (distance < attackRange) {
+                enemiesInRange.push(enemy);
+            }
         }
 
-        // Visual feedback for the attack
-        if (closestEnemy.element) {
-            closestEnemy.element.classList.add('attacking');
-            setTimeout(() => {
-                if (closestEnemy.element) {
-                    closestEnemy.element.classList.remove('attacking');
+        if (enemiesInRange.length > 0) {
+            console.log(`Warrior attacking ${enemiesInRange.length} enemies in range`);
+
+            // Apply damage to all enemies in range
+            for (const enemy of enemiesInRange) {
+                enemy.health -= gameState.hero.attackPower;
+
+                // Visual feedback for the attack
+                if (enemy.element) {
+                    enemy.element.classList.add('attacking');
+                    setTimeout(() => {
+                        if (enemy.element) {
+                            enemy.element.classList.remove('attacking');
+                        }
+                    }, 200);
                 }
-            }, 200);
-        }
 
-        // Update enemy health bar
-        closestEnemy.updateHealthBar();
+                // Update enemy health bar
+                enemy.updateHealthBar();
 
-        // Check if enemy died from the attack
-        if (closestEnemy.health <= 0) {
-            if (closestEnemy.element && closestEnemy.element.parentNode) {
-                closestEnemy.element.parentNode.removeChild(closestEnemy.element);
+                // Check if enemy died from the attack
+                if (enemy.health <= 0) {
+                    handleEnemyDeath(enemy);
+                }
             }
-            gameState.gold += Math.floor(Math.random() * 5) + 3;
-            gameState.score += closestEnemy.points;
-            const index = window.gameState.enemies.indexOf(closestEnemy);
-            if (index > -1) {
-                window.gameState.enemies.splice(index, 1);
-            }
-        }
 
-        // Update UI to show new gold amount
-        updateUI();
-        return true; // Attack was successful
+            // Show sword swing animation
+            animateSwordSwing();
+
+            // Update UI to show new gold amount
+            updateUI();
+            return true; // Attack was successful
+        } else {
+            console.log("No enemies in Warrior's attack range");
+            return false; // No attack performed
+        }
     } else {
-        console.log(`No enemy in range to attack! Closest distance: ${closestDistance}`);
-        return false; // No attack performed
+        // For Mage: Attack only the closest enemy but with longer range
+        let closestEnemy = null;
+        let closestDistance = Infinity;
+
+        for (const enemy of window.gameState.enemies) {
+            const dx = enemy.position.x - heroPosition.x;
+            const dy = enemy.position.y - heroPosition.y;
+            const distance = Math.sqrt(dx*dx + dy*dy);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+
+        if (closestEnemy && closestDistance < attackRange) {
+            console.log(`Mage attacking ${closestEnemy.type} at distance ${closestDistance}`);
+            closestEnemy.health -= gameState.hero.attackPower;
+
+            // Show magic orb animation
+            animateMagicOrb(closestEnemy);
+
+            // Visual feedback for the attack
+            if (closestEnemy.element) {
+                closestEnemy.element.classList.add('attacking');
+                setTimeout(() => {
+                    if (closestEnemy.element) {
+                        closestEnemy.element.classList.remove('attacking');
+                    }
+                }, 200);
+            }
+
+            // Update enemy health bar
+            closestEnemy.updateHealthBar();
+
+            // Check if enemy died from the attack
+            if (closestEnemy.health <= 0) {
+                handleEnemyDeath(closestEnemy);
+            }
+
+            // Update UI to show new gold amount
+            updateUI();
+            return true; // Attack was successful
+        } else {
+            console.log(`No enemy in Mage's range to attack! Closest distance: ${closestDistance}`);
+            return false; // No attack performed
+        }
     }
 }
 
@@ -297,7 +370,26 @@ window.onload = function() {
     }
 };
 
+function selectDifficulty(difficulty) {
+    // Update game state
+    gameState.difficulty = difficulty;
 
+    // Update UI
+    const buttons = document.querySelectorAll('.difficulty-btn');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    document.getElementById(`${difficulty}-btn`).classList.add('selected');
+
+    // Update description
+    const descriptions = {
+        easy: "Easy: Fewer enemies with slower spawn rate",
+        medium: "Medium: Normal enemy spawn rate and strength",
+        hard: "Hard: More enemies that spawn quickly and hit harder"
+    };
+    document.getElementById('difficulty-description').textContent = descriptions[difficulty];
+
+    // Save the state
+    saveGameState();
+}
 
 
 // Inicializace pozice postavy

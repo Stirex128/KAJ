@@ -223,9 +223,19 @@ window.addEventListener('resize', () => {
 
 // Inicializovat canvas při načtení stránky
 document.addEventListener('DOMContentLoaded', () => {
+    if (!gameState.difficulty) {
+        selectDifficulty('medium');
+    } else if (document.getElementById(`${gameState.difficulty}-btn`)) {
+        selectDifficulty(gameState.difficulty);
+    }
     const canvas = document.getElementById('attack-canvas');
     if (canvas) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
 });
+
+document.getElementById('easy-btn').addEventListener('click', () => selectDifficulty('easy'));
+document.getElementById('medium-btn').addEventListener('click', () => selectDifficulty('medium'));
+document.getElementById('hard-btn').addEventListener('click', () => selectDifficulty('hard'));
+

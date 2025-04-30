@@ -25,18 +25,29 @@
             <img id="hero-image" src="Tiles/placeholder.png" alt="Selected Hero">
         </figure>
         <article>
+            <h2>Warrior</h2> <!--// jen aby to prošlo validací-->
             <button id="warrior-btn">Choose Warrior</button>
             <p id="warrior-stats" class="hidden">Health: 120 | Attack: 10 | Defense: 8</p>
         </article>
         <article>
+            <h2>Mage</h2> <!--// jen aby to prošlo validací-->
             <button id="mage-btn">Choose Mage</button>
             <p id="mage-stats" class="hidden">Health: 80 | Attack: 5 | Magic: 40</p>
         </article>
         <br>
+        <div class="difficulty-selection">
+            <h2>Select Difficulty</h2>
+            <div class="difficulty-buttons">
+                <button id="easy-btn" class="difficulty-btn">Easy</button>
+                <button id="medium-btn" class="difficulty-btn">Medium</button>
+                <button id="hard-btn" class="difficulty-btn">Hard</button>
+            </div>
+            <p id="difficulty-description">Medium: Normal enemy spawn rate and strength</p>
+        </div>
         <button id="confirm-btn" class="hidden">Confirm Selection</button>
     </section>
 
-    <section class="container hidden" id="game-area">
+    <div class="container hidden" id="game-area">
         <figure class="hero-container">
             <img id="hp-bar" src="Myimages/Full.png" alt="HP Bar" class="hp-bar">
             <img id="game-hero-image" src="Tiles/placeholder.png" alt="Your Hero">        </figure>
@@ -45,7 +56,7 @@
             <img id="coin-image" src="Myimages/coin.jpg" alt="Coin">
             <span id="gold-amount">0</span>
         </aside>
-    </section>
+    </div>
 
     <section id="shop-menu" class="hidden">
         <h1>Shop Menu</h1>
@@ -62,10 +73,10 @@
 <audio id="background-music" src="Sounds/background-music-hd.mp3" loop></audio>
 
 <script src="gamestate.js"></script>
+<script src="Cookies.js"></script>
 <script src="SaveLoadGame.js"></script>
 <script src="UpdateFunctions.js"></script>
 <script src="index.js"></script>
-<script src="Cookies.js"></script>
 <script src="EventListeners.js"></script>
 <script src="Enemies.js"></script>
 <script src="shop.js"></script>

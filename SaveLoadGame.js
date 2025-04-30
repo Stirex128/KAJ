@@ -1,7 +1,14 @@
 // Save and load game state
 function saveGameState() {
     const stateToSave = {
-        hero: {
+        gold: gameState.gold || 0,
+        score: gameState.score || 0,
+        difficulty: gameState.difficulty || 'medium'
+    };
+
+    // Only add hero data if a hero exists
+    if (gameState.hero) {
+        stateToSave.hero = {
             name: gameState.hero.name,
             displayName: gameState.hero.displayName || gameState.hero.name,
             health: gameState.hero.health,
@@ -9,11 +16,14 @@ function saveGameState() {
             specialAttribute: gameState.hero.specialAttribute,
             specialValue: gameState.hero.specialValue,
             sprite: gameState.hero.sprite
-        },
-        gold: gameState.gold,
-        score: gameState.score, // Add this line
-        heroPosition: heroPosition
-    };
+        };
+
+        // Only save position if it exists
+        if (heroPosition) {
+            stateToSave.heroPosition = heroPosition;
+        }
+    }
+
     console.log("Saving game state:", stateToSave);
     setCookie('gameState', JSON.stringify(stateToSave), 365);
 }
@@ -22,6 +32,7 @@ function loadGameState() {
     if (savedState) {
         const parsedState = JSON.parse(savedState);
         console.log("Loading game state:", parsedState);
+        gameState.difficulty = parsedState.difficulty || 'medium';
         if (parsedState.hero) {
             // Initialize hero object
             gameState.hero = new Hero(
@@ -51,7 +62,9 @@ function loadGameState() {
             if (heroContainer) {
                 createOrUpdateHeroNameLabel(heroContainer, gameState.hero.displayName);
             }
-
+            if (document.getElementById(`${gameState.difficulty}-btn`)) {
+                selectDifficulty(gameState.difficulty);
+            }
             // Restore hero position
             if (parsedState.heroPosition) {
                 heroPosition = parsedState.heroPosition;

@@ -118,10 +118,11 @@ function spawnEnemy() {
     ];
 
     const randomType = types[Math.floor(Math.random() * types.length)];
+    const difficultyMultiplier = difficultySettings[gameState.difficulty].enemyMultiplier;
     const enemy = new Enemy(
         randomType.type,
-        randomType.health,
-        randomType.damage,
+        Math.round(randomType.health * difficultyMultiplier),
+        Math.round(randomType.damage * difficultyMultiplier),
         randomType.speed,
         randomType.sprite,
         randomType.points
@@ -234,7 +235,10 @@ function gameLoop() {
     }
 
     // Spawn new enemies
-    if (Math.random() < 0.001 && window.gameState.enemies.length < 5) {
+    const difficulty = difficultySettings[gameState.difficulty || 'medium'];
+
+    // Spawn new enemies based on difficulty
+    if (Math.random() < difficulty.spawnRate && window.gameState.enemies.length < difficulty.maxEnemies) {
         spawnEnemy();
     }
 
