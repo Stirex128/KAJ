@@ -27,11 +27,21 @@ function saveGameState() {
     console.log("Saving game state:", stateToSave);
     setCookie('gameState', JSON.stringify(stateToSave), 365);
 }
+
+let gameLoopId = null; // Store reference to the game loop
+
 function loadGameState() {
     const savedState = getCookie('gameState');
     if (savedState) {
         const parsedState = JSON.parse(savedState);
         console.log("Loading game state:", parsedState);
+
+        // Cancel any existing game loop first
+        if (gameLoopId !== null) {
+            cancelAnimationFrame(gameLoopId);
+            gameLoopId = null;
+        }
+
         gameState.difficulty = parsedState.difficulty || 'medium';
         if (parsedState.hero) {
             // Initialize hero object
@@ -78,7 +88,21 @@ function loadGameState() {
             canMove = true;
 
             // Initialize enemies and start game loop after loading game
-            initializeEnemies();
+            initializeEnemies(); // This will start a new game loop
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Don't set any default difficulty here, only load existing state
+    setTimeout(() => {
+        // Load saved game state first
+        loadGameState();
+
+        // Only set default difficulty if no game state exists
+        // This ensures we don't overwrite existing cookies
+        if (!gameState.hero && !gameState.difficulty) {
+            selectDifficulty('medium');
+        }
+    }, 100);
+});

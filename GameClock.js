@@ -3,15 +3,14 @@ function initializeGameClock() {
     // Create the clock element
     const clockElement = document.createElement('div');
     clockElement.id = 'game-clock';
-    clockElement.style.position = 'absolute';
-    clockElement.style.top = '10px';
-    clockElement.style.left = '50%';
-    clockElement.style.transform = 'translateX(-50%)';
+    clockElement.style.position = 'fixed';
+    clockElement.style.bottom = '20px';
+    clockElement.style.right = '20px';
     clockElement.style.fontFamily = 'monospace';
     clockElement.style.fontSize = '1.5rem';
     clockElement.style.color = '#fff';
     clockElement.style.textShadow = '0 0 5px #000';
-    clockElement.style.padding = '5px 15px';
+    //clockElement.style.padding = '5px 15px';
     clockElement.style.backgroundColor = 'rgba(0,0,0,0.5)';
     clockElement.style.borderRadius = '5px';
     clockElement.style.zIndex = '102';
@@ -22,31 +21,23 @@ function initializeGameClock() {
         gameArea.appendChild(clockElement);
     }
 
-    // Initial update with placeholder
-    updateClock();
+    // Initial update with local time
+    updateClockWithLocalTime();
 
     // Set up regular updates
-    setInterval(updateClock, 1000);
+    setInterval(updateClockWithLocalTime, 1000);
 }
 
-function updateClock() {
+function updateClockWithLocalTime() {
     const clockElement = document.getElementById('game-clock');
     if (!clockElement) return;
 
     if (navigator.onLine) {
-        // Online: get and show actual time
-        fetchOnlineTime()
-            .then(time => {
-                clockElement.textContent = time;
-            })
-            .catch(error => {
-                // Fallback to local time if API fails
-                const now = new Date();
-                clockElement.textContent = formatLocalTime(now);
-                console.error('Failed to fetch online time:', error);
-            });
+        // Online: show local time (avoid API rate limits)
+        const now = new Date();
+        clockElement.textContent = formatLocalTime(now);
     } else {
-        // Offline: show placeholder or local time
+        // Offline: show placeholder
         clockElement.textContent = "-- OFFLINE --";
     }
 }
@@ -58,26 +49,11 @@ function formatLocalTime(date) {
     return `${hours}:${minutes}:${seconds}`;
 }
 
-async function fetchOnlineTime() {
-    try {
-        // Using WorldTimeAPI for accurate time
-        const response = await fetch('https://worldtimeapi.org/api/ip');
-        const data = await response.json();
-
-        // Parse the datetime string
-        const dateTime = new Date(data.datetime);
-        return formatLocalTime(dateTime);
-    } catch (error) {
-        // If the API fails, throw the error to trigger the fallback
-        throw error;
-    }
-}
-
 // Initialize the clock
 document.addEventListener('DOMContentLoaded', function() {
     // Add event listener for online/offline status changes
-    window.addEventListener('online', updateClock);
-    window.addEventListener('offline', updateClock);
+    window.addEventListener('online', updateClockWithLocalTime);
+    window.addEventListener('offline', updateClockWithLocalTime);
 
     // Initialize the clock when the game area becomes visible
     const observer = new MutationObserver(function(mutations) {

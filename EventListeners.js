@@ -46,9 +46,9 @@ document.getElementById('confirm-btn').addEventListener('click', confirmSelectio
 
 document.getElementById('warrior-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0097.png';
 });
-document.addEventListener('DOMContentLoaded', (event) => {
-    loadGameState();
-});
+//document.addEventListener('DOMContentLoaded', (event) => {
+  // loadGameState();
+//});
 document.getElementById('restart-btn').addEventListener('click', () => {
     deleteCookie('gameState');
     location.reload();

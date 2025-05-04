@@ -327,13 +327,13 @@ button:hover {
 
 #score-container {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 5px;
     z-index: 1000;
-    background-color: rgba(0, 0, 0, 0.6);
     padding: 5px 10px;
     border-radius: 10px;
 }
@@ -341,13 +341,13 @@ button:hover {
 #score-label {
     font-size: 18px;
     font-weight: bold;
-    color: white;
+    color: orange;
 }
 
 #score-amount {
     font-size: 24px;
     font-weight: bold;
-    color: #4CAF50; /* Green color for score */
+    color: orange; /* Green color for score */
 }
 
 /* Magic orb animation styles */

@@ -249,11 +249,9 @@ function gameLoop() {
         loopCounter = 0; // Reset the counter
     }
 
-    // Continue the game loop
-    requestAnimationFrame(gameLoop);
+    // Store the ID for potential cancellation
+    gameLoopId = requestAnimationFrame(gameLoop);
 }
-
-
 
 function initializeEnemies() {
     console.log("Inicializuji nepřátele...");
@@ -268,6 +266,12 @@ function initializeEnemies() {
         window.gameState.enemies = [];
     }
 
+    // Cancel any existing game loop
+    if (gameLoopId !== null) {
+        cancelAnimationFrame(gameLoopId);
+        gameLoopId = null;
+    }
+
     // Create initial enemies
     console.log("Vytvářím počáteční nepřátele");
     for (let i = 0; i < 3; i++) {
@@ -277,7 +281,7 @@ function initializeEnemies() {
     // Start game loop
     console.log("Spouštím herní smyčku");
     window.gameLoopActive = true;
-    requestAnimationFrame(gameLoop);
+    gameLoopId = requestAnimationFrame(gameLoop);
 }
 
 
