@@ -49,29 +49,3 @@ function formatLocalTime(date) {
     return `${hours}:${minutes}:${seconds}`;
 }
 
-// Initialize the clock
-document.addEventListener('DOMContentLoaded', function() {
-    // Add event listener for online/offline status changes
-    window.addEventListener('online', updateClockWithLocalTime);
-    window.addEventListener('offline', updateClockWithLocalTime);
-
-    // Initialize the clock when the game area becomes visible
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.target.id === 'game-area' &&
-                !mutation.target.classList.contains('hidden')) {
-                initializeGameClock();
-            }
-        });
-    });
-
-    const gameArea = document.getElementById('game-area');
-    if (gameArea) {
-        observer.observe(gameArea, { attributes: true, attributeFilter: ['class'] });
-
-        // Initialize immediately if game area is already visible
-        if (!gameArea.classList.contains('hidden')) {
-            initializeGameClock();
-        }
-    }
-});

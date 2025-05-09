@@ -284,18 +284,3 @@ function initializeEnemies() {
     gameLoopId = requestAnimationFrame(gameLoop);
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Create a style element
-    const styleElement = document.createElement('style');
-
-    // Override the enemy img filter
-    styleElement.textContent = `
-        .enemy img {
-            filter: none !important;
-        }
-    `;
-
-    // Append to document
-    document.head.appendChild(styleElement);
-});

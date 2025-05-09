@@ -89,20 +89,13 @@ function loadGameState() {
 
             // Initialize enemies and start game loop after loading game
             initializeEnemies(); // This will start a new game loop
+            // Zakážeme scrollování po načtení hry
+            toggleScroll(false);
+
         }
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Don't set any default difficulty here, only load existing state
-    setTimeout(() => {
-        // Load saved game state first
-        loadGameState();
 
-        // Only set default difficulty if no game state exists
-        // This ensures we don't overwrite existing cookies
-        if (!gameState.hero && !gameState.difficulty) {
-            selectDifficulty('medium');
-        }
-    }, 100);
-});
+
+

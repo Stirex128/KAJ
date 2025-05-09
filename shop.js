@@ -27,7 +27,6 @@ const shopItems = [
         hero.attackPower += 5; // Increase hero's attack power
         console.log('Hero attack power increased by 5!');
     }, 'Tiles/tile_0116.png'),
-    new ShopItem('Gold Bonus', 75, { row: 2, column: 1 }, 'Grants 50 extra gold', 'Tiles/tile_0117.png'),
 ];
 
 function renderShopItems(shopItems) {

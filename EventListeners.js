@@ -46,9 +46,6 @@ document.getElementById('confirm-btn').addEventListener('click', confirmSelectio
 
 document.getElementById('warrior-btn').addEventListener('click', () => {document.getElementById('hero-image').src = 'Tiles/tile_0097.png';
 });
-//document.addEventListener('DOMContentLoaded', (event) => {
-  // loadGameState();
-//});
 document.getElementById('restart-btn').addEventListener('click', () => {
     deleteCookie('gameState');
     location.reload();
@@ -223,17 +220,60 @@ window.addEventListener('resize', () => {
 
 // Inicializovat canvas při načtení stránky
 document.addEventListener('DOMContentLoaded', () => {
-    if (!gameState.difficulty) {
+    // 1. Načti stav z cookies
+    loadGameState();
+    // Add event listener for online/offline status changes
+    window.addEventListener('online', updateClockWithLocalTime);
+    window.addEventListener('offline', updateClockWithLocalTime);
+
+    // Initialize the clock when the game area becomes visible
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.id === 'game-area' &&
+                !mutation.target.classList.contains('hidden')) {
+                initializeGameClock();
+            }
+        });
+    });
+
+    const gameArea = document.getElementById('game-area');
+    if (gameArea) {
+        observer.observe(gameArea, { attributes: true, attributeFilter: ['class'] });
+
+        // Initialize immediately if game area is already visible
+        if (!gameArea.classList.contains('hidden')) {
+            initializeGameClock();
+        }
+    }
+    const styleElement = document.createElement('style');
+
+    // Override the enemy img filter
+    styleElement.textContent = `
+        .enemy img {
+            filter: none !important;
+        }
+    `;
+
+    // Append to document
+    document.head.appendChild(styleElement);
+    // 2. Zkontroluj, zda je načtený stav validní
+    if (!gameState || !gameState.difficulty) {
         selectDifficulty('medium');
     } else if (document.getElementById(`${gameState.difficulty}-btn`)) {
         selectDifficulty(gameState.difficulty);
     }
+
+    // 3. Nastav canvas
     const canvas = document.getElementById('attack-canvas');
     if (canvas) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
+
+    // 4. Ujisti se, že UI odpovídá stavu
+    updateUI();
 });
+
 
 document.getElementById('easy-btn').addEventListener('click', () => selectDifficulty('easy'));
 document.getElementById('medium-btn').addEventListener('click', () => selectDifficulty('medium'));

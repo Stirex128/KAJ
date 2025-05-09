@@ -79,7 +79,7 @@ function animateMagicOrb(targetEnemy) {
 
     // Load magic orb image
     const orbImage = new Image();
-    orbImage.src = 'Tiles/tile_0111.png'; // Magic projectile image
+    orbImage.src = 'Tiles/orb1.png'; // Magic projectile image
 
     // Orb dimensions
     const orbSize = 32;
@@ -114,9 +114,7 @@ function animateMagicOrb(targetEnemy) {
             // Draw the magic orb
             ctx.save();
 
-            // Add glow effect
-            ctx.shadowColor = '#5555FF';
-            ctx.shadowBlur = 15;
+
 
             // Draw the orb
             ctx.drawImage(
@@ -155,16 +153,7 @@ function animateMagicOrb(targetEnemy) {
     function drawImpact(x, y) {
         ctx.save();
 
-        // Create radial gradient for impact
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
-        gradient.addColorStop(0, 'rgba(100, 100, 255, 0.8)');
-        gradient.addColorStop(0.7, 'rgba(50, 50, 200, 0.5)');
-        gradient.addColorStop(1, 'rgba(0, 0, 150, 0)');
-
-        // Draw impact circle
-        ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(x, y, 30, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.restore();

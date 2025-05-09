@@ -1,5 +1,13 @@
 // Fantasy Clicker Game - JavaScript Logic
 
+// Funkce pro povolení nebo zakázání scrollování na stránce
+function toggleScroll(allowScroll) {
+    if (allowScroll) {
+        document.body.style.overflow = 'auto';
+    } else {
+        document.body.style.overflow = 'hidden';
+    }
+}
 
 if (!window.gameState) window.gameState = {};
 if (!window.gameState.enemies) window.gameState.enemies = [];
@@ -50,6 +58,53 @@ class Hero {
     }
 }
 
+function validateHeroName() {
+    const nameInput = document.getElementById('hero-name-input');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const warningText = document.getElementById('name-warning');
+
+    if (!nameInput || !confirmBtn) return;
+
+    const name = nameInput.value.trim();
+
+    // Validation rules
+    const maxLength = 20;
+    const minLength = 3;
+    const namePattern = /^[A-Za-z0-9 ]+$/;
+
+    if (name.length < minLength) {
+        warningText.textContent = `Name must be at least ${minLength} characters.`;
+        confirmBtn.disabled = true;
+    } else if (name.length > maxLength) {
+        warningText.textContent = `Name cannot exceed ${maxLength} characters.`;
+        confirmBtn.disabled = true;
+    } else if (!namePattern.test(name)) {
+        warningText.textContent = "Name can only contain letters, numbers, and spaces.";
+        confirmBtn.disabled = true;
+    } else {
+        warningText.textContent = "";
+        confirmBtn.disabled = false;
+    }
+}
+
+// Attach validation to input
+function attachNameValidation() {
+    const nameInput = document.getElementById('hero-name-input');
+    if (!nameInput) return;
+
+    // Add warning text if not exists
+    let warningText = document.getElementById('name-warning');
+    if (!warningText) {
+        warningText = document.createElement('p');
+        warningText.id = 'name-warning';
+        warningText.style.color = 'red';
+        nameInput.parentNode.appendChild(warningText);
+    }
+
+    nameInput.addEventListener('input', validateHeroName);
+    validateHeroName(); // Initial validation
+}
+
 // Choose hero
 function chooseHero(type) {
     document.getElementById('warrior-stats').classList.add('hidden');
@@ -89,8 +144,12 @@ function chooseHero(type) {
     formContainer.innerHTML = formHtml;
     document.getElementById(type === 'warrior' ? 'warrior-stats' : 'mage-stats').appendChild(formContainer);
 
-    document.getElementById('hero-name-input').focus();
+    attachNameValidation();
+
     document.getElementById('confirm-btn').classList.remove('hidden');
+    // Povolíme scrollování při výběru jména
+    toggleScroll(true);
+
 }
 
 function handleEnemyDeath(enemy) {
@@ -111,6 +170,9 @@ function handleEnemyDeath(enemy) {
 }
 
 function confirmSelection() {
+    // Zakážeme scrollování po potvrzení výběru
+    toggleScroll(false);
+
     // Get the hero name from the input
     const nameInput = document.getElementById('hero-name-input');
     const heroName = nameInput ? nameInput.value.trim() : '';
@@ -142,6 +204,7 @@ function confirmSelection() {
 
     // Initialize enemies and start game loop after hero selection
     initializeEnemies();
+
 }
 
 // Attack function
