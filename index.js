@@ -40,7 +40,6 @@ if (!gameState.difficulty) {
     gameState.difficulty = 'medium';
 }
 
-// Hero class
 class Hero {
     constructor(name, health, attackPower, specialAttribute, specialValue, sprite) {
         this.name = name;
@@ -126,11 +125,11 @@ function chooseHero(type) {
         document.getElementById('hero-image').style.height = 'auto';
         document.getElementById('hero-image').style.imageRendering = 'pixelated';
     }
-
     // Remove any existing form first
     const existingForm = document.getElementById('hero-name-form');
     if (existingForm) {
         existingForm.parentNode.removeChild(existingForm);
+
     }
 
     // Create a new form and add it to the current hero stats container
@@ -147,7 +146,6 @@ function chooseHero(type) {
     attachNameValidation();
 
     document.getElementById('confirm-btn').classList.remove('hidden');
-    // Povolíme scrollování při výběru jména
     toggleScroll(true);
 
 }
@@ -170,7 +168,6 @@ function handleEnemyDeath(enemy) {
 }
 
 function confirmSelection() {
-    // Zakážeme scrollování po potvrzení výběru
     toggleScroll(false);
 
     // Get the hero name from the input
@@ -202,13 +199,11 @@ function confirmSelection() {
     updateHeroPosition();
     saveGameState();
 
-    // Initialize enemies and start game loop after hero selection
     initializeEnemies();
 
 }
 
-// Attack function
-function attackEnemy() {
+function SpecAttack() {
     if (!gameState.hero) return;
 
     console.log(`Attacking with Q - Enemies count: ${window.gameState.enemies.length}`);
@@ -246,8 +241,6 @@ function attackEnemy() {
                         }
                     }, 200);
                 }
-
-                // Update enemy health bar
                 enemy.updateHealthBar();
 
                 // Check if enemy died from the attack
@@ -255,11 +248,7 @@ function attackEnemy() {
                     handleEnemyDeath(enemy);
                 }
             }
-
-            // Show sword swing animation
             animateSwordSwing();
-
-            // Update UI to show new gold amount
             updateUI();
             return true; // Attack was successful
         } else {
@@ -299,15 +288,11 @@ function attackEnemy() {
                 }, 200);
             }
 
-            // Update enemy health bar
             closestEnemy.updateHealthBar();
-
-            // Check if enemy died from the attack
             if (closestEnemy.health <= 0) {
                 handleEnemyDeath(closestEnemy);
             }
 
-            // Update UI to show new gold amount
             updateUI();
             return true; // Attack was successful
         } else {
@@ -317,8 +302,7 @@ function attackEnemy() {
     }
 }
 
-// Add a special attack function for the E key
-function specialAttack() {
+function NormAttack() {
     if (!gameState.hero) return;
 
     // Check hero's special attribute
@@ -333,23 +317,18 @@ function specialAttack() {
             const dy = enemy.position.y - heroPosition.y;
             const distance = Math.sqrt(dx*dx + dy*dy);
 
-            if (distance < 120) { // Larger range for special attack
+            if (distance < 120) {
                 enemiesInRange.push(enemy);
             }
         });
 
         if (enemiesInRange.length > 0) {
-            // Apply special attack damage to all enemies in range
             let killedCount = 0;
 
             enemiesInRange.forEach(enemy => {
                 enemy.health -= specialPower;
                 console.log(`Hero uses special attack! ${enemy.type} has ${enemy.health}/${enemy.maxHealth} health left.`);
-
-                // Update enemy health bar
                 enemy.updateHealthBar();
-
-                // Check if enemy died
                 if (enemy.health <= 0) {
                     console.log(`${enemy.type} was killed by special attack!`);
                     if (enemy.element && enemy.element.parentNode) {
@@ -369,8 +348,6 @@ function specialAttack() {
             if (killedCount > 0) {
                 console.log(`Special attack killed ${killedCount} enemies!`);
             }
-
-            // Update UI to show new gold amount
             updateUI();
         } else {
             console.log("No enemies in range for special attack!");
@@ -378,7 +355,6 @@ function specialAttack() {
     }
 }
 
-// Animate attack
 function animateAttack() {
     let sprite = document.getElementById('hero-image');
     sprite.style.animation = 'none';  // Restart animace
@@ -410,7 +386,6 @@ function animateAttack() {
     }
 }
 
-// Pozice postavy
 let heroPosition = { x: window.innerWidth / 2, y: 100 }; // Startovní pozice
 const moveSpeed = 5; // Jak rychle se postava pohybuje
 
@@ -434,7 +409,6 @@ window.onload = function() {
 };
 
 function selectDifficulty(difficulty) {
-    // Update game state
     gameState.difficulty = difficulty;
 
     // Update UI
@@ -450,12 +424,10 @@ function selectDifficulty(difficulty) {
     };
     document.getElementById('difficulty-description').textContent = descriptions[difficulty];
 
-    // Save the state
     saveGameState();
 }
 
 
-// Inicializace pozice postavy
 updateHeroPosition();
 
 // Initial UI update

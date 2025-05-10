@@ -1,5 +1,3 @@
-// Funkce pro aktualizaci pozice postavy
-// Update this function in UpdateFunctions.js
 function updateHeroPosition() {
     if (!canMove) return;
 
@@ -13,7 +11,6 @@ function updateHeroPosition() {
         window.gameState.heroPosition = heroPosition; // Ensure this is updated
     }
 }
-
 function updateUI() {
     const enemyHealthElement = document.getElementById('enemy-health');
     if (enemyHealthElement) {
@@ -41,60 +38,26 @@ function updateUI() {
 }
 
 function updateHPBar() {
-    const hpBar = document.getElementById('hp-bar');
-    if (!gameState.hero) return;
+    const fillRect = document.getElementById('hp-bar-fill');
+    if (!gameState.hero || !fillRect) return;
 
+    // maximální HP podle typu hrdiny
     const maxHP = gameState.hero.name === 'Warrior' ? 120 : 80;
     const currentHP = gameState.hero.health;
-    const hpPercentage = (currentHP / maxHP) * 100;
+    // spočítáme procenta (0–100)
+    const pct = Math.max(0, Math.min(100, (currentHP / maxHP) * 100));
 
-    let hpImage = 'Full.png';
-    if (hpPercentage <= 0) {
-        hpImage = 'null.png';
-    } else if (hpPercentage <= 16) {
-        hpImage = '1.png';
-    } else if (hpPercentage <= 32) {
-        hpImage = '2.png';
-    } else if (hpPercentage <= 48) {
-        hpImage = '3.png';
-    } else if (hpPercentage <= 64) {
-        hpImage = '4.png';
-    } else if (hpPercentage <= 80) {
-        hpImage = '5.png';
-    } else if (hpPercentage <= 96) {
-        hpImage = '6.png';
-    }
-
-    hpBar.src = `Myimages/${hpImage}`;
+    fillRect.setAttribute('width', (pct / 100) * 120);
 }
 
 function updateHeroHealthBar(currentHealth) {
-    const hpBar = document.getElementById('hp-bar');
-    if (!gameState.hero) return;
-    console.log(`Updating hero health bar. Current health: ${currentHealth}`);
+    const fillRect = document.getElementById('hp-bar-fill');
+    if (!gameState.hero || !fillRect) return;
+
     const maxHP = gameState.hero.name === 'Warrior' ? 120 : 80;
-    const hpPercentage = (currentHealth / maxHP) * 100;
-
-    let hpImage = 'Full.png';
-    if (hpPercentage <= 0) {
-        hpImage = 'null.png';
-    } else if (hpPercentage <= 16) {
-        hpImage = '1.png';
-    } else if (hpPercentage <= 32) {
-        hpImage = '2.png';
-    } else if (hpPercentage <= 48) {
-        hpImage = '3.png';
-    } else if (hpPercentage <= 64) {
-        hpImage = '4.png';
-    } else if (hpPercentage <= 80) {
-        hpImage = '5.png';
-    } else if (hpPercentage <= 96) {
-        hpImage = '6.png';
-    }
-
-    hpBar.src = `Myimages/${hpImage}`;
+    const pct = Math.max(0, Math.min(100, (currentHealth / maxHP) * 100));
+    fillRect.setAttribute('width', (pct / 100) * 120);
 }
-
 
 function createOrUpdateHeroNameLabel(container, name) {
     // Remove any existing label first

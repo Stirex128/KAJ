@@ -1,4 +1,3 @@
-// Game state
 const gameState = {
     hero: null,
     units: [],

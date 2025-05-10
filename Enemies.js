@@ -1,4 +1,3 @@
-// Třída pro nepřátele s health bary jako má hrdina
 class Enemy {
     constructor(type, health, damage, speed, sprite, points) {
         this.type = type;
@@ -7,7 +6,7 @@ class Enemy {
         this.damage = damage;
         this.speed = speed;
         this.sprite = sprite;
-        this.points = points;  // Add points value
+        this.points = points;
         this.position = {
             x: Math.random() * (window.innerWidth - 100),
             y: Math.random() * (window.innerHeight - 300) + 150
@@ -20,12 +19,9 @@ class Enemy {
 
     move() {
         // Ensure movement happens every frame
-        // Změna směru občas
         if (Math.random() < 0.02) {
             this.direction += (Math.random() - 0.5) * Math.PI/2;
         }
-
-        // Pohyb v aktuálním směru - increase speed slightly for better visibility
         this.position.x += Math.cos(this.direction) * this.speed;
         this.position.y += Math.sin(this.direction) * this.speed;
 
@@ -48,7 +44,6 @@ class Enemy {
             this.element.style.top = `${this.position.y}px`;
         }
     }
-
     attack(hero) {
         const currentTime = Date.now();
         if (currentTime - this.lastAttackTime < 1000) return; // Attack cooldown
@@ -74,10 +69,10 @@ class Enemy {
                     deleteCookie('gameState');
                     location.reload();
                 }
+
             }
         }
     }
-
     updateHealthBar() {
         if (this.healthBarImg) {
             const healthPercent = (this.health / this.maxHealth) * 100;
@@ -107,7 +102,6 @@ if (!window.gameState) {
 if (!window.gameState.enemies) {
     window.gameState.enemies = [];
 }
-
 // Funkce pro vytvoření nepřítele
 function spawnEnemy() {
     console.log("Vytvářím nepřítele...");
@@ -139,7 +133,6 @@ function spawnEnemy() {
     enemyElement.style.width = '64px';
     enemyElement.style.height = '80px';
     enemyElement.style.zIndex = '100';
-
     // Health bar image
     const healthBarImg = document.createElement('img');
     healthBarImg.src = 'Myimages/Full.png';
@@ -167,7 +160,6 @@ function spawnEnemy() {
     const enemyFigure = document.createElement('figure');
     enemyFigure.style.margin = '0';
     enemyFigure.style.padding = '0';
-
     const enemySprite = document.createElement('img');
     enemySprite.src = enemy.sprite;
     enemySprite.style.width = '64px';
@@ -196,17 +188,15 @@ function spawnEnemy() {
     console.log(`Počet nepřátel: ${window.gameState.enemies.length}`);
 }
 
-window.canMove = true; // Ensure this is set to true
+window.canMove = true; // Flag to control movement
 
-// Modify the gameLoop function
-let loopCounter = 0; // Counter for game loop iterations
-const saveInterval = 100; // Save every 100 game loops (adjust as needed)
+let loopCounter = 0;
+const saveInterval = 100; // Save every 100 game loops
 
 function gameLoop() {
-    if (window.gamePaused) return; // Stop the game loop if paused
+    if (window.gamePaused) return;
 
     const currentTime = Date.now();
-
     // Handle movement
     if (keysPressed['w']) heroPosition.y -= moveSpeed; // Move up
     if (keysPressed['s']) heroPosition.y += moveSpeed; // Move down
@@ -216,13 +206,13 @@ function gameLoop() {
 
     // Handle attacks with cooldown
     if (keysPressed['q'] && currentTime - gameState.lastAttackTime > gameState.attackCooldown) {
-        attackEnemy();
+        SpecAttack();
         gameState.lastAttackTime = currentTime; // Update last attack time
     }
 
     if (keysPressed['e'] && currentTime - gameState.lastAttackTime > gameState.attackCooldown) {
-        specialAttack();
-        gameState.lastAttackTime = currentTime; // Update last attack time
+        NormAttack();
+        gameState.lastAttackTime = currentTime;
     }
 
     // Update enemies
@@ -233,20 +223,16 @@ function gameLoop() {
             enemy.attack(window.gameState.hero);
         });
     }
-
-    // Spawn new enemies
     const difficulty = difficultySettings[gameState.difficulty || 'medium'];
-
     // Spawn new enemies based on difficulty
     if (Math.random() < difficulty.spawnRate && window.gameState.enemies.length < difficulty.maxEnemies) {
         spawnEnemy();
     }
 
-    // Increment loop counter and save game state every `saveInterval` loops
     loopCounter++;
     if (loopCounter >= saveInterval) {
         saveGameState();
-        loopCounter = 0; // Reset the counter
+        loopCounter = 0;
     }
 
     // Store the ID for potential cancellation
@@ -277,8 +263,6 @@ function initializeEnemies() {
     for (let i = 0; i < 3; i++) {
         spawnEnemy();
     }
-
-    // Start game loop
     console.log("Spouštím herní smyčku");
     window.gameLoopActive = true;
     gameLoopId = requestAnimationFrame(gameLoop);

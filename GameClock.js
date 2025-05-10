@@ -1,4 +1,3 @@
-// GameClock.js
 function initializeGameClock() {
     // Create the clock element
     const clockElement = document.createElement('div');

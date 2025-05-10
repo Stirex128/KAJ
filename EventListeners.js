@@ -84,7 +84,7 @@ document.addEventListener('keyup', (event) => {
     }
 });*/
 
-/* When the user clicks on the button,
+/* When the use clicks on the button,
 toggle between hiding and showing the dropdown content */
 function menuFunction() {
     document.getElementById("menuDropdown").classList.toggle("show");
@@ -106,8 +106,6 @@ window.onclick = function(event) {
 
 function dropHandler(ev) {
     console.log("File(s) dropped");
-
-    // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 
     if (ev.dataTransfer.items) {
@@ -157,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 document.body.appendChild(shopMenu);
 
-                // Stylování menu
+                // Styl menu
                 shopMenu.style.position = 'fixed';
                 shopMenu.style.top = '50%';
                 shopMenu.style.left = '50%';
@@ -172,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 shopMenu.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
             }
             renderShopItems(shopItems);
-            // Zobrazení menu
+            // Zobraz
             shopMenu.classList.remove('hidden');
 
             // Přidání funkce pro zavření menu
@@ -207,8 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Element s ID "coin-container" nebyl nalezen.');
     }
 });
-
-
 // Přidat posluchač pro změnu velikosti okna
 window.addEventListener('resize', () => {
     const canvas = document.getElementById('attack-canvas');
@@ -220,7 +216,6 @@ window.addEventListener('resize', () => {
 
 // Inicializovat canvas při načtení stránky
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Načti stav z cookies
     loadGameState();
     // Add event listener for online/offline status changes
     window.addEventListener('online', updateClockWithLocalTime);
@@ -269,8 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
-
-    // 4. Ujisti se, že UI odpovídá stavu
     updateUI();
 });
 

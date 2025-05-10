@@ -20,7 +20,7 @@ function animateSwordSwing() {
     // Circle radius - adjust this to change the size of the circle
     const radius = 40;   // Distance from rotation center to sword
 
-    const duration = 500; // Animation duration in milliseconds
+    const duration = 500;
     const startTime = performance.now();
 
     swordImage.onload = () => {
@@ -33,11 +33,9 @@ function animateSwordSwing() {
             // Full 360-degree rotation (2π radians)
             const angle = progress * Math.PI * 2;
 
-            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
 
-            // Position at hero center with offsets
             ctx.translate(heroPosition.x + offsetX, heroPosition.y + offsetY);
 
             // Rotate based on animation progress
@@ -73,19 +71,16 @@ function animateMagicOrb(targetEnemy) {
     const canvas = document.getElementById('attack-canvas');
     const ctx = canvas.getContext('2d');
 
-    // Set canvas to window size
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Load magic orb image
     const orbImage = new Image();
-    orbImage.src = 'Tiles/orb1.png'; // Magic projectile image
+    orbImage.src = 'Tiles/orb1.png';
 
-    // Orb dimensions
     const orbSize = 32;
 
     // Animation parameters
-    const duration = 500; // Animation duration in milliseconds
+    const duration = 250;
     const startTime = performance.now();
 
     // Start position (hero)
@@ -104,19 +99,16 @@ function animateMagicOrb(targetEnemy) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
-            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Calculate current position using linear interpolation
             const currentX = startX + (endX - startX) * progress;
             const currentY = startY + (endY - startY) * progress;
 
-            // Draw the magic orb
             ctx.save();
 
 
 
-            // Draw the orb
             ctx.drawImage(
                 orbImage,
                 currentX - orbSize/2,
@@ -126,15 +118,11 @@ function animateMagicOrb(targetEnemy) {
             );
 
             ctx.restore();
-
             // Continue animation if not complete
             if (progress < 1) {
                 requestAnimationFrame(drawFrame);
             } else {
-                // Add impact effect
                 drawImpact(endX, endY);
-
-                // Clear the canvas after impact effect
                 setTimeout(() => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                 }, 200);
@@ -144,18 +132,15 @@ function animateMagicOrb(targetEnemy) {
         // Start the animation
         requestAnimationFrame(drawFrame);
     };
-
     orbImage.onerror = () => {
         console.error('Failed to load magic orb image.');
     };
 
-    // Function to draw impact effect
     function drawImpact(x, y) {
         ctx.save();
 
         ctx.beginPath();
         ctx.fill();
-
         ctx.restore();
     }
 }

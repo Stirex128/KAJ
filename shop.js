@@ -1,10 +1,10 @@
 class ShopItem {
     constructor(name, price, position, effect, image) {
-        this.name = name; // Name of the item
-        this.price = price; // Price of the item
-        this.position = position; // Position in the shop (e.g., {row: 1, column: 2})
-        this.effect = effect; // Function or description of the item's effect
-        this.image = image; // Path to the item's image
+        this.name = name;
+        this.price = price;
+        this.position = position;
+        this.effect = effect;
+        this.image = image;
     }
 
     // Method to apply the item's effect
@@ -20,15 +20,14 @@ class ShopItem {
 // Example items
 const shopItems = [
     new ShopItem('Health Potion', 10, { row: 1, column: 1 }, (hero) => {
-        hero.health = Math.min(hero.health + 20, 120); // Heal the hero
+        hero.health = Math.min(hero.health + 20, 120);
         console.log('Hero healed by 20 HP!');
     }, 'Tiles/tile_0115.png'),
     new ShopItem('Attack Boost', 100, { row: 1, column: 2 }, (hero) => {
-        hero.attackPower += 5; // Increase hero's attack power
+        hero.attackPower += 5;
         console.log('Hero attack power increased by 5!');
     }, 'Tiles/tile_0116.png'),
 ];
-
 function renderShopItems(shopItems) {
     const shopMenu = document.getElementById('shop-menu');
 
@@ -48,19 +47,15 @@ function renderShopItems(shopItems) {
         itemElement.className = 'shop-item';
         itemElement.style.margin = '10px';
         itemElement.style.textAlign = 'center';
-
         const itemImage = document.createElement('img');
         itemImage.src = item.image;
         itemImage.alt = item.name;
         itemImage.style.width = '64px';
         itemImage.style.height = '64px';
-
         const itemName = document.createElement('p');
         itemName.textContent = `${item.name} - ${item.price} Gold`;
-
         itemElement.appendChild(itemImage);
         itemElement.appendChild(itemName);
-
         itemElement.addEventListener('click', () => {
             if (gameState.gold >= item.price) {
                 gameState.gold -= item.price;

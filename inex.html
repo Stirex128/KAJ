@@ -53,7 +53,12 @@
             <span id="score-amount">0</span>
         </aside>
         <figure class="hero-container">
-            <img id="hp-bar" src="Myimages/Full.png" alt="HP Bar" class="hp-bar">
+            <svg id="hp-bar" class="hp-bar" width="120" height="14" viewBox="0 0 120 14" xmlns="http://www.w3.org/2000/svg">
+                <!-- pozadí -->
+                <rect id="hp-bar-bg" x="0" y="0" width="120" height="14" fill="#444" rx="3"/>
+                <!-- výplň (šířka se bude měnit) -->
+                <rect id="hp-bar-fill" x="0" y="0" width="120" height="14" fill="#4CAF50" rx="3"/>
+            </svg>
             <img id="game-hero-image" src="Tiles/placeholder.png" alt="Your Hero">        </figure>
 
         <aside id="coin-container">

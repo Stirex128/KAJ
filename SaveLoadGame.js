@@ -1,4 +1,3 @@
-// Save and load game state
 function saveGameState() {
     const stateToSave = {
         gold: gameState.gold || 0,
@@ -41,10 +40,8 @@ function loadGameState() {
             cancelAnimationFrame(gameLoopId);
             gameLoopId = null;
         }
-
         gameState.difficulty = parsedState.difficulty || 'medium';
         if (parsedState.hero) {
-            // Initialize hero object
             gameState.hero = new Hero(
                 parsedState.hero.name,
                 parsedState.hero.health,
