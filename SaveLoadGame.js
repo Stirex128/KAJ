@@ -85,10 +85,9 @@ function loadGameState() {
             canMove = true;
 
             // Initialize enemies and start game loop after loading game
-            initializeEnemies(); // This will start a new game loop
+            initializeEnemies();
             // Zakážeme scrollování po načtení hry
             toggleScroll(false);
-
         }
     }
 }

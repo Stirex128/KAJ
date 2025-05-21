@@ -57,15 +57,13 @@ class Hero {
     }
 }
 
-function validateHeroName() {
+function validateheroName() {
     const nameInput = document.getElementById('hero-name-input');
     const confirmBtn = document.getElementById('confirm-btn');
     const warningText = document.getElementById('name-warning');
 
     if (!nameInput || !confirmBtn) return;
-
     const name = nameInput.value.trim();
-
     // Validation rules
     const maxLength = 20;
     const minLength = 3;
@@ -100,8 +98,8 @@ function attachNameValidation() {
         nameInput.parentNode.appendChild(warningText);
     }
 
-    nameInput.addEventListener('input', validateHeroName);
-    validateHeroName(); // Initial validation
+    nameInput.addEventListener('input', validateheroName);
+    validateheroName(); // Initial validation
 }
 
 // Choose hero
